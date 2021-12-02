@@ -12,20 +12,38 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ControleBovideoSquadFrontEnd</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3 sticky-top">
+            <div class="container-fluid ">
+                <a class="navbar-brand" href="/">Controle de Bovideos</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link active" href="produtor">
+                                Produtor
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link active" href="propriedade">
+                                Propriedade
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="animal">
+                                Rebanho
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="registro-vacina">
+                                Registro de Vacina
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="venda">
+                                Venda
+                            </a>
                         </li>
                     </ul>
                 </div>
