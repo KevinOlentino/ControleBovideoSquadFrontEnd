@@ -1,0 +1,156 @@
+﻿<div class="container col-xxl-8 px-4 py-4">
+  <h1 class="display-5 text-center">Lista de Produtores</h1>
+  <p class="blockquote-footer text-center">
+    Selecione um produtor para acessar as informações
+  </p>
+  <div class="row d-flex justify-content-between">
+    <button type="button" data-bs-toggle="modal" href="#adicionarProdutor" role="button"
+            class="btn btn-success col-md-3 mt-2">Adicionar
+    </button>
+    <div class="d-flex col-md-4 mt-2">
+      <input class="form-control me-2" type="search" placeholder="Pesquisar por CPF" [(ngModel)]="CPF" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit" (click)="pesquisarPorCPF()">Procurar</button>
+    </div>
+  </div>
+  <div class="row">
+     <div class="">
+        <table class="table table-striped table-hover">
+          <thead>
+          <tr *ngIf="propriedades.length > 0">
+            <th scope="col">IdProdutor</th>
+            <th scope="col">Nome</th>
+            <th scope="col">CPF</th>
+            <th scope="col">Rua</th>
+            <th scope="col">Numero</th>
+            <th scope="col">Municipio</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Detalhes</th>
+          </tr>
+          </thead>
+          <tbody data-bind="foreach: produtor">
+          <tr>
+            <td data-bind="text: idProdutor"></td>
+            <td data-bind="text: nome"></td>
+            <td data-bind="text: cpf"></td>
+            <td data-bind="text: rua"></td>
+            <td data-bind="text: numero"></td>
+            <td data-bind="text: municipio"></td>
+            <td data-bind="text: estado"></td>  
+            <td><a type="button" class="btn btn-primary ms-1">Detalhes</a></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" #modal id="adicionarProdutor" aria-hidden="true" aria-labelledby="adicionarProdutorLabel"
+     tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content container">
+      <div class="container">
+        <div class="modal-header">
+          <button class="btn btn-close" data-bs-dismiss="modal" #buttonClose></button>
+        </div>
+        <ng-container>
+        <form class="row p-3" id="formProdutor" method="POST" #frm="ngForm" (ngSubmit)="incluir(frm)">
+          <div class="col-md-6">
+            <label for="inputNome" class="form-label">Nome</label>
+            <input type="text" name="nome" class="form-control" id="inputNome" [(ngModel)]="produtor.nome">
+          </div>
+          <div class="col-md-6">
+            <label for="inputCPF" class="form-label">CPF (Somente Numero)</label>
+            <div class="input-group has-validation">
+              <input type="text" pattern="[0-9]+" name="cpf" [maxLength]="11" class="form-control" id="inputCPF"">
+            </div>
+          </div>
+          <div class="col-md-10">
+            <label for="inputRua" class="form-label">Rua</label>
+            <input type="text" name="rua" class="form-control" id="inputRua">
+          </div>
+          <div class="col-md-2">
+            <label for="inputNumero" class="form-label">Numero</label>
+            <input type="text" name="numero" pattern="[0-9]+" class="form-control" id="inputNumero">
+          </div>
+          <div class="col-md-4">
+            <label for="inputState" class="form-label">Municipio</label>
+            <select name="idMunicipio" id="inputState" class="form-select" [(ngModel)]="produtor.endereco.idMunicipio">
+              <option value="0">Selecione um Municipio</option>
+              <option *ngFor="let municipio of municipios" value="{{municipio.idMunicipio}}">{{municipio.nome}}
+                - {{municipio.estado}}</option>
+            </select>
+
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Cadastrar</button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="editarProdutor" aria-hidden="true" aria-labelledby="editarProdutorLabel" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content container">
+      <div class="container">
+        <div class="modal-header">
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form class="row" method="POST" #frm="ngForm" (ngSubmit)="editarProdutor(frm)">
+          <div class="col-md-6">
+            <label for="inputNome" class="form-label">Nome</label>
+            <input type="email" name="nome" class="form-control" id="inputNome" [(ngModel)]="produtor.nome">
+            <div *ngIf="error != undefined && error.Nome != undefined" class="col-12 text-danger">
+              {{error.Nome[0]}}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="inputCPF" class="form-label">CPF</label>
+            <input disabled type="text" name="cpf" class="form-control" id="inputCPF" [(ngModel)]="produtor.cpf">
+            <div *ngIf="error != undefined && error.CPF != undefined" class="col-12 text-danger">
+              {{error.CPF[0]}}
+            </div>
+          </div>
+          <div class="col-md-10">
+            <label for="inputRua" class="form-label">Rua</label>
+            <input type="text" name="rua" class="form-control" id="inputRua" [(ngModel)]="produtor.endereco.rua">
+            <div *ngIf="error != undefined && error.Rua != undefined" class="col-12 text-danger">
+              {{error.Rua}}
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label for="inputNumero" class="form-label">Numero</label>
+            <input type="text" name="numero" class="form-control" id="inputNumero"
+                   [(ngModel)]="produtor.endereco.numero">
+            <div *ngIf="error != undefined && error.Numero != undefined" class="col-12 text-danger">
+              {{error.Numero}}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="inputState" class="form-label">Estado</label>
+            <select name="idMunicipio" id="inputState" class="form-select" [(ngModel)]="produtor.endereco.idMunicipio">
+              <option *ngFor="let municipio of municipios" [ngValue]="municipio.idMunicipio">{{municipio.nome}}
+                - {{municipio.estado}}</option>
+            </select>
+            <div *ngIf="error != undefined && error.Municipio != undefined" class="col-12 text-danger">
+              Selecione um municipio!
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Atualizar</button>
+            <button type="button" class="btn btn-danger"  data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    var produtor;
+    $.getJSON("https://localhost:7168/api/Produtor", function(data) { 
+        produtor = data; 
+        ko.applyBindings(produtor);
+    })
+</script>
