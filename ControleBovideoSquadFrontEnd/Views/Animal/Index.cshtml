@@ -1,0 +1,36 @@
+﻿<div class="container col-xxl-8 px-4 py-4">
+  <h1 class="display-5 text-center">Lista de Entrada de animais</h1>
+  <p class="blockquote-footer text-center">
+    Selecione um animal para acessar as informações
+  </p>
+</div>
+<div>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Quantidade total</th>
+                <th>Quantidade vacinada</th>
+                <th>Espécie</th>
+                <th>Propriedade</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: animais">
+            <tr>
+                <td data-bind="text: $data.quantidadeTotal"></td>
+                <td data-bind="text: $data.quantidadeVacinada"></td>
+                <td data-bind="text: $data.especieAnimal.nome"></td>
+                <td data-bind="text: $data.propriedadeAnimal.nome"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    function appViewModel() {
+        this.animais = ko.observableArray();
+        $.get('https://localhost:7168/api/animal', data => {
+            this.animais(data)
+            console.log(data)
+        })
+    }
+    ko.applyBindings(new appViewModel())
+</script>

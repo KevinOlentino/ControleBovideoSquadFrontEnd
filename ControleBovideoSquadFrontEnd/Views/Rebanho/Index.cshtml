@@ -1,0 +1,36 @@
+﻿<div class="container col-xxl-8 px-4 py-4">
+  <h1 class="display-5 text-center">Lista de Rebanhos</h1>
+  <p class="blockquote-footer text-center">
+    Selecione um rebanho para acessar as informações
+  </p>
+<div>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Quantidade total</th>
+                <th>Quantidade vacinada aftosa</th>
+                <th>Quantidade vacinada brucelose</th>
+                <th>Espécie</th>
+                <th>Propriedade</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: rebanhos">
+            <tr>
+                <td data-bind="text: $data.quantidadeTotal"></td>
+                <td data-bind="text: $data.quantidadeVacinadaAftosa"></td>
+                <td data-bind="text: $data.quantidadeVacinadaBrucelose"></td>
+                <td data-bind="text: $data.especie.nome"></td>
+                <td data-bind="text: $data.propriedade.nome"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    function appViewModel() {
+        this.rebanhos = ko.observableArray();
+        $.get('https://localhost:7168/api/rebanho', data => {
+            this.rebanhos(data)
+        })
+    }
+    ko.applyBindings(new appViewModel())
+</script>
