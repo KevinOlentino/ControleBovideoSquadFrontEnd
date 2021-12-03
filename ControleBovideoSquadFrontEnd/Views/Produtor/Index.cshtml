@@ -1,174 +1,254 @@
 ﻿<div class="container">
-  <h1 class="display-5 text-center">Lista de Produtores</h1>
-  <p class="blockquote-footer text-center">
-    Selecione um produtor para acessar as informações
-  </p>
-  <div class="row d-flex justify-content-between">
-    <button type="button" data-bs-toggle="modal" href="#adicionarProdutor" role="button"
-            class="btn btn-success col-md-3 mt-2">Adicionar
-    </button>
-    <div class="d-flex col-md-4 mt-2">
-      <input class="form-control me-2" type="search" placeholder="Pesquisar por CPF" [(ngModel)]="CPF" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Procurar</button>
+    <h1 class="display-5 text-center">Lista de Produtores</h1>
+    <p class="blockquote-footer text-center">
+        Selecione um produtor para acessar as informações
+    </p>
+    <div class="row d-flex justify-content-between">
+        <button type="button" data-bs-toggle="modal" href="#adicionarProdutor" role="button"
+                class="btn btn-success col-md-3 mt-2">
+
+            Adicionar
+        </button>
+        <div class="d-flex col-md-4 mt-2">
+            <input class="form-control me-2" type="search" placeholder="Pesquisar por CPF" [(ngModel)]="CPF" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Procurar</button>
+        </div>
     </div>
-  </div>
-  <div class="row">
+    <div class="row">
         <table class="table table-striped table-hover">
-          <thead>
-          <tr>
-            <th scope="col">CPF</th>
-            <th scope="col">Nome</th>            
-            <th scope="col">Detalhes</th>
-            <th scoped="col">Editar</th>            
-          </tr>
-          </thead>
-          <tbody data-bind="foreach: produtores">
-          <tr>
-            <td data-bind="text: cpf"></td>
-            <td data-bind="text: nome"></td>                    
-            <td><a type="button" class="btn btn-primary ms-1">Detalhes</a></td>
-            <td><a href="#editarProdutor" data-bs-toggle="modal" class="btn btn-warning fas fa-edit">Editar</a></td>            
-          </tr>
-          </tbody>
+            <thead>
+                <tr>
+                    <th scope="col">CPF</th>
+                    <th scope="col">Nome</th>
+
+                    <th scope="col">municipio </th>
+                    <th scope="col">Detalhes</th>
+                    <th scoped="col">Editar</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: produtores">
+                <tr data-bind="click: getprodutorselecionado">
+                    <td data-bind="text: cpf"></td>
+                    <td data-bind="text: nome"></td>
+
+                    <td data-bind="text: municipio"></td>
+                    <td><a class="btn btn-primary ms-1">Detalhes</a></td>
+                    <td><a href="#editarProdutor" data-bs-toggle="modal" class="btn btn-warning fas fa-edit">Editar</a></td>
+
+                </tr>
+            </tbody>
         </table>
-      </div>
+    </div>
 </div>
 
 <div class="modal fade" #modal id="adicionarProdutor" aria-hidden="true" aria-labelledby="adicionarProdutorLabel"
      tabindex="-1">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content container">
-      <div class="container">
-        <div class="modal-header">
-          <button class="btn btn-close" data-bs-dismiss="modal" #buttonClose></button>
-        </div>
-        <form class="row p-3" id="formProdutor" method="POST"> 
-          <div class="col-md-6">
-            <label for="inputNome" class="form-label">Nome</label>
-            <input type="text" name="nome" class="form-control" id="inputNome" [(ngModel)]="produtor.nome">
-          </div>
-           <div class="col-md-6">
-            <label for="inputCPF" class="form-label">CPF (Somente Numero)</label>
-              <input type="text" pattern="[0-9]+" name="cpf" [maxLength]="11" class="form-control" id="inputCPF">
-          </div>
-          <div class="col-md-10">
-            <label for="inputRua" class="form-label">Rua</label>
-            <input type="text" name="rua" class="form-control" id="inputRua">
-          </div>
-          <div class="col-md-2">
-            <label for="inputNumero" class="form-label">Numero</label>
-            <input type="text" name="numero" pattern="[0-9]+" class="form-control" id="inputNumero">
-          </div>
-           <div class="col-md-4">
-            <label for="inputState" class="form-label">Municipio</label>
-            <select data-bind="options: municipios,
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content container">
+            <div class="container">
+                <div class="modal-header">
+                    <button class="btn btn-close" data-bs-dismiss="modal" #buttonClose></button>
+                </div>
+                <form class="row p-3" id="formProdutor" method="POST">
+                    <div class="col-md-6">
+                        <label for="inputNome" class="form-label">Nome</label>
+                        <input type="text" name="nome" class="form-control" data-bind="value: nome" id="inputNomeAdd">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputCPF" class="form-label">CPF</label>
+                        <input type="text" name="cpf" class="form-control" data-bind="value: cpf" id="inputCPFAdd">
+
+                    </div>
+                    <div class="col-md-10">
+                        <label for="inputRua" class="form-label">Rua</label>
+                        <input type="text" name="rua" class="form-control" id="inputRuaAdd" data-bind="value: rua">
+
+                    </div>
+                    <div class="col-md-2">
+                        <label for="inputNumero" class="form-label">Numero</label>
+                        <input type="text" name="numero" class="form-control" id="inputNumeroAdd" data-bind="value: numero">
+
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputState" class="form-label">Municipio</label>
+                        <select data-bind="options: municipios,
                        optionsText: 'nome',
                        value: selectedMunicipio,
-                       optionsCaption: 'Selecione um Municipio'" name="idMunicipio" id="inputState" class="form-select">                            
-            </select>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-success">Cadastrar</button>
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-          </div> 
-        </form>
-      </div>
+                       optionsValue: 'idMunicipio',
+                       optionsCaption: 'Selecione um Municipio'" name="idMunicipio" id="inputState" class="form-select">
+                        </select>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-bind="click: Save">Cadastrar</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="modal fade" id="editarProdutor" aria-hidden="true" aria-labelledby="editarProdutorLabel" tabindex="-1">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content container">
-      <div class="container">
-        <div class="modal-header">
-          <button class="btn btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <form class="row" method="POST">
-          <div class="col-md-6">
-            <label for="inputNome" class="form-label">Nome</label>
-            <input type="email" name="nome" class="form-control" id="inputNome">
-          </div>
-          <div class="col-md-6">
-            <label for="inputCPF" class="form-label">CPF</label>
-            <input disabled type="text" name="cpf" class="form-control" id="inputCPF">
-            <div *ngIf="error != undefined && error.CPF != undefined" class="col-12 text-danger">   
-                
-            </div>
-          </div>
-          <div class="col-md-10">
-            <label for="inputRua" class="form-label">Rua</label>
-            <input type="text" name="rua" class="form-control" id="inputRua" [(ngModel)]="produtor.endereco.rua">
-            <div *ngIf="error != undefined && error.Rua != undefined" class="col-12 text-danger">
-              
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label for="inputNumero" class="form-label">Numero</label>
-            <input type="text" name="numero" class="form-control" id="inputNumero">
-            <div *ngIf="error != undefined && error.Numero != undefined" class="col-12 text-danger">
-              
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label for="inputState" class="form-label">Estado</label>
-            <select data-bind="options: municipios,
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content container">
+            <div class="container">
+                <div class="modal-header">
+                    <button class="btn btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form class="row" method="POST">
+                    <div class="col-md-6">
+                        <label for="inputNome" class="form-label">Nome</label>
+                        <input type="text" name="nome" class="form-control" data-bind="value: nome" id="inputNome">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputCPF" class="form-label">CPF</label>
+                        <input disabled type="text" name="cpf" class="form-control" data-bind="value: cpf" id="inputCPF">
+
+                    </div>
+                    <div class="col-md-10">
+                        <label for="inputRua" class="form-label">Rua</label>
+                        <input type="text" name="rua" class="form-control" id="inputRua" data-bind="value: rua">
+
+                    </div>
+                    <div class="col-md-2">
+                        <label for="inputNumero" class="form-label">Numero</label>
+                        <input type="text" name="numero" class="form-control" id="inputNumero" data-bind="value: numero">
+
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputState" class="form-label">Estado</label>
+                        <select data-bind="options: municipios,
                        optionsText: 'nome',
                        value: selectedMunicipio,
-                       optionsCaption: 'Selecione um Municipio'" name="idMunicipio" id="inputState" class="form-select">                            
-            </select>        
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-success">Atualizar</button>
-            <button type="button" class="btn btn-danger"  data-bs-dismiss="modal">Cancelar</button>
-          </div>
-        </form>
-      </div>
+                       optionsValue: 'idMunicipio'
+                    " name="idMunicipio" id="inputMunicipio" class="form-select">
+                        </select>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" data-bind="click: update">Atualizar</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script type="text/javascript">
-   var selectedMunicipio;
 
-   var ProdutorViewModel = function(){
-    self.produtores = ko.observableArray([]);
-    self.municipios = ko.observableArray([]);
-    self.municipioEdit = ko.observableArray([]);
 
-    GetProdutores();
-    GetMunicipios();
+     var ProdutorViewModel = function(){
+      var self = this;
 
-    function GetProdutores(){
-        $.ajax({
-                  type: "GET",
-                  url: "https://localhost:7168/api/Produtor",
-                  contentType: "application/json; charset=utf-8",
-                  dataType: "json",
-                  success: function (data) {
-                      self.produtores(data);                   
-                  },
-                  error: function (error) {
-                  alert(error.status + "<--and--> " + error.statusText);
+      self.produtores = ko.observableArray([]);
+      self.municipios = ko.observableArray([]);
+      self.municipioEdit = ko.observableArray([]);
+      self.selectedMunicipio = ko.observable();
+
+      GetProdutores();
+      GetMunicipios();
+
+          self.idProdutor = ko.observable("0");
+          self.nome = ko.observable("");
+          self.cpf = ko.observable("");
+          self.idEndereco = ko.observable("");
+          self.rua = ko.observable("");
+          self.numero = ko.observable("");
+          self.municipio = ko.observable("");
+          self.idMunicipio = ko.observable("");
+
+            var produtorDados = {
+              idProdutor: self.idProdutor,
+              nome: self.nome,
+              cpf: self.cpf,
+              idEndereco: self.idEndereco,
+              rua: self.rua,
+              numero: self.numero,
+              municipio: "",
+              idMunicipio: self.selectedMunicipio,
+              estado: ""
+           }
+
+      function GetProdutores(){
+          $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7168/api/Produtor",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        self.produtores(data);
+                    },
+                    error: function (error) {
+                    alert(error.status + "<--and--> " + error.statusText);
+                }
+          });
+      }
+
+      self.Save = function (){
+          produtorDados.idEndereco = 0;
+          $.ajax({
+                      type: "POST",
+                      url: "https://localhost:7168/api/Produtor",                     
+                      data: ko.toJSON(produtorDados),
+                      contentType: "application/json",
+                      success: function (data) {
+                          alert("Registro incluído com sucesso");                                                  
+                          GetProdutores();
+                      },
+                      error: function () {
+                          alert("Falhou");
+                      }                   
+          })
+             console.log(ko.toJSON(produtorDados));
+      }
+
+          function GetMunicipios(){
+               $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7168/api/Municipio",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        self.municipios(data);
+                        self.municipioEdit(data);
+                        console.log(municipioEdit());
+                    },
+                    error: function (error) {
+                    alert(error.status + "<--and--> " + error.statusText);
+                }
+               });
+          }
+              self.update = function(){
+                  var url = "https://localhost:7168/api/Produtor/" + self.idProdutor();
+                  $.ajax({
+                      type: "PUT",
+                      url: url,
+                      data: ko.toJSON(produtorDados),
+                      contentType: "application/json",
+                      sucess: function(data){
+                          alert("Registro atualizado com sucesso!");
+                          GetProdutores();
+                      },
+                      error: function(error){
+                          alert("Falhou");
+                      }
+                  })
+                  console.log(ko.toJSON(produtorDados));
               }
-        });
+
+              self.getprodutorselecionado = function(_produtor){
+                  self.idProdutor(_produtor.idProdutor);
+                  self.nome(_produtor.nome);
+                  self.cpf(_produtor.cpf);
+                  self.idEndereco(_produtor.idEndereco);
+                  self.rua(_produtor.rua);
+                  self.numero(_produtor.numero);
+                  document.getElementById("inputMunicipio").value = _produtor.idMunicipio;
+                  self.selectedMunicipio(_produtor.idMunicipio)
+
+         }
     }
-        function GetMunicipios(){
-             $.ajax({
-                  type: "GET",
-                  url: "https://localhost:7168/api/Municipio",
-                  contentType: "application/json; charset=utf-8",
-                  dataType: "json",
-                  success: function (data) {
-                      self.municipios(data);
-                      self.municipioEdit(data);
-                      console.log(municipioEdit());
-                  },
-                  error: function (error) {
-                  alert(error.status + "<--and--> " + error.statusText);
-              }
-             });  
-        }      
-   }
-        ko.applyBindings(ProdutorViewModel());
+         ko.applyBindings(ProdutorViewModel());
 </script>
