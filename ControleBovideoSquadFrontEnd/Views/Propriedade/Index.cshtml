@@ -1,0 +1,332 @@
+﻿@model IEnumerable<ControleBovideoSquad.CrossCutting.Dto.Propriedade.PropriedadeDto>
+
+@{
+    ViewData["Title"] = "Propriedades";
+}
+
+<h1 class="display-5 text-center">Propriedades</h1>
+
+<div class="container px-4 py-4">
+    <p class="blockquote-footer text-center">
+        Selecione um produtor para acessar as informações
+    </p>
+    <div class="row d-flex justify-content-between">
+        <button type="button" data-bs-toggle="modal" href="#adicionarPropriedade" role="button"
+                class="btn btn-success col-md-3 mt-2">
+            Adicionar
+        </button>
+        <div class="d-flex col-md-4 mt-2">
+            <input class="form-control me-2" type="search" placeholder="Pesquisar por CPF" [(ngModel)]="CPF" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit" (click)="pesquisarPorCPF()">Procurar</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome Produtor</th>
+                        <th scope="col">Nome Propriedade</th>
+                        <th scope="col">InscricaoEstadual</th>
+                        <th scope="col">Municipio</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: propriedades">
+                    <tr data-bind="click: getPropriedadeSelecionado">
+                        <td data-bind="text: nomeProdutor"></td>
+                        <td data-bind="text: nome"></td>
+                        <td data-bind="text: inscricaoEstadual"></td>
+                        <td data-bind="text: municipio"></td>
+                        <td>
+                            <a data-bs-toggle="modal" href="#detalhesPropriedade" class="btn btn-primary ms-1">Detalhes</a>
+                            <a data-bs-toggle="modal" href="#editarPropriedade" class="btn btn-primary ms-1">Editar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" #modal id="adicionarPropriedade" aria-hidden="true" aria-labelledby="adicionarProdutorLabel" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content container">
+            <div class="container">
+                <div class="modal-header">
+                    <button class="btn btn-close" data-bs-dismiss="modal" #buttonClose></button>
+                </div>
+                <ng-container>
+                    <form class="row p-3" id="formProdutor" method="POST" data-bind="submit: post">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Informe o CPF do produtor: </label>
+                                    <input class="form-control me-2" type="text" placeholder="000.000.000-00" name="cpf" data-bind="value: cpf">
+                                    <div class="text-danger">
+                                        {{msgValidaCpf}}
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Nome da propriedade: </label>
+                                    <input class="form-control me-2" type="search" placeholder="ex. Fazenda" name="nome_propriedade" data-bind="value: nome">
+                                    <div class="text-danger" *ngIf="validaNome">
+                                        {{msgValidaNome}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Informe a Inscrição Estadual: </label>
+                                    <input class="form-control me-2" type="search" placeholder="000.000.000" name="inscricao_estadual" data-bind="value: inscricaoEstadual">
+                                    <div class="text-danger" *ngIf="validaInscricao">
+                                        {{msgValidaInscricao}}
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Selecione o município: </label>
+                                    <select class="form-select" id="id_municipio" name="id_municipio" [(ngModel)]="propriedade.id_municipio">
+                                        <option *ngFor="let m of municipios" value="{{ m.id }}">{{ m.nome }}</option>
+                                    </select>
+                                    <div class="text-danger" *ngIf="validaMunicipio">
+                                        {{msgValidaMunicipio}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label class="form-label">Selecione o município: </label>
+                        <select class="form-select" name="id_municipio" [(ngModel)]="endereco.id_municipio">
+                            <option *ngFor="let municipio of municipios" value="{{ municipio.id }}">{{ municipio.nome }}</option>
+                        </select>
+                        <div *ngIf="validaMunicipio" class="text-danger">
+                            {{ msgValidaMunicipio }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label class="form-label">Rua: </label>
+                        <input class="form-control" type="text" name="rua" data-bind="value: rua" >
+                        <div *ngIf="validaRua" class="text-danger">
+                            {{ msgValidaRua }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group mb-3">
+                        <label class="form-label">Numero: </label>
+                        <input class="form-control" type="number" name="numero" data-bind="value: numero">
+                        <div *ngIf="validaNumero" class="text-danger">
+                            {{ msgValidaNumero }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Cadastrar</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" #modal id="editarPropriedade" aria-hidden="true" aria-labelledby="adicionarProdutorLabel" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content container">
+            <div class="container">
+                <div class="modal-header">
+                    <button class="btn btn-close" data-bs-dismiss="modal" #buttonClose></button>
+                </div>
+                <ng-container>
+                    <form class="row p-3" id="formProdutor" method="POST" #frm="ngForm" (ngSubmit)="incluir(frm)">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Informe o CPF do produtor: </label>
+                                    <input (blur)="verificaCpf()" class="form-control me-2" type="text" placeholder="000.000.000-00" name="cpf" [(ngModel)]="produtor.cpf">
+                                    <div class="text-danger" *ngIf="validaCpf">
+                                        {{msgValidaCpf}}
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Nome da propriedade: </label>
+                                    <input class="form-control me-2" type="search" placeholder="ex. Fazenda" name="nome_propriedade" [(ngModel)]="propriedade.nome_propriedade">
+                                    <div class="text-danger" *ngIf="validaNome">
+                                        {{msgValidaNome}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Informe a Inscrição Estadual: </label>
+                                    <input (blur)="verificaInscricao()" class="form-control me-2" type="search" placeholder="000.000.000" name="inscricao_estadual" [(ngModel)]="propriedade.inscricao_estadual">
+                                    <div class="text-danger" *ngIf="validaInscricao">
+                                        {{msgValidaInscricao}}
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Selecione o município: </label>
+                                    <select class="form-select" id="id_municipio" name="id_municipio" [(ngModel)]="propriedade.id_municipio">
+                                        <option *ngFor="let m of municipios" value="{{ m.id }}">{{ m.nome }}</option>
+                                    </select>
+                                    <div class="text-danger" *ngIf="validaMunicipio">
+                                        {{msgValidaMunicipio}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Cadastrar</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" #modal id="detalhesPropriedade" aria-hidden="true" aria-labelledby="adicionarProdutorLabel" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content container">
+            <div class="container">
+                <div class="modal-header">
+                    <button class="btn btn-close" data-bs-dismiss="modal" #buttonClose></button>
+                </div>
+                <ng-container>
+                    <div class="form-group mb-3">
+                        <label class="form-label" id="txtPropriedadeNome" data-bind="value: idPropriedade"><strong> Proprietário: </strong></label>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label"><strong>Nome da propriedade: </strong>{{ propriedade.nome_propriedade }}</label>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label"><strong>Município: </strong>{{ municipio.nome }}</label>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label"><strong>Inscricao estadual: </strong>{{ propriedade.inscricao_estadual }}</label>
+                    </div>
+                    <a (click)="voltar()" class="btn btn-outline-dark">Voltar</a>
+                    <a href="propriedade-editar/{{ propriedade.id }}" class="btn btn-outline-primary mx-3">Editar</a>
+                    <div *ngIf="mostrar">
+                        <hr>
+                        <h4>Rebanhos</h4>
+                        <table class="table border rounded-circle table-striped mt-3">
+                            <thead>
+                                <tr>
+                                    <th scope="col"> Especie</th>
+                                    <th scope="col">| Quantidade de animais</th>
+                                    <th scope="col">| Qtde de vacinados Aftosa</th>
+                                    <th scope="col">| Qtde de vacinados Brucelose</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let r of rebanho">
+                                    <td>{{ r.id_especie == 1 ? "Bovino" : "Bubalino" }}</td>
+                                    <td>| {{ r.qtde_total }}</td>
+                                    <td>| {{ r.qtde_vacinado_aftosa }}</td>
+                                    <td>| {{ r.qtde_vacinado_brucelose }}</td>
+                                    <td class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <a href="animal/{{ r.id }}" class="">
+                                            <img src="assets/img/info.png" width="25" alt="Detalhes">
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    const url = "https://localhost:7168/api/propriedade";
+    var ViewPropriedade = function()
+    {
+        self = this;
+        self.propriedades = ko.observableArray([]);
+        
+        GetPropriedades();
+
+        self.idPropriedade = ko.observable("");
+        self.inscricaoEstadual = ko.observable("");
+        self.nome = ko.observable("");
+        self.idProdutor = ko.observable("");
+        self.nomeProdutor = ko.observable("");
+        self.idEndereco = ko.observable("");
+        self.rua = ko.observable("");
+        self.numero = ko.observable("");
+        self.idMunicipio = ko.observable("");
+        self.municipio = ko.observable("");
+        self.estado = ko.observable("");    
+        self.cpf = ko.observable("");    
+        
+        var propriedadeAdd = {
+            idPropriedade: self.idPropriedade(),
+            inscricaoEstadual: self.inscricaoEstadual(),
+            nome: self.nome(),
+            idProdutor: self.idProdutor(),
+            nomeProdutor: self.nomeProdutor(),
+            idEndereco: self.idEndereco(),
+            rua: self.rua(),
+            numero: self.numero(),
+            idMunicipio: self.idMunicipio(),
+            municipio: self.municipio(),
+            estado: self.estado()
+        };
+        
+        self.getPropriedadeSelecionado = function(propriedadeSelect){
+                  self.idPropriedade(propriedadeSelect.idPropriedade);
+                  console.log("teste");
+                 };
+        self.getPropriedasdeSelecionado = function(propriedadeSelect){
+                  self.idPropriedade(propriedadeSelect.idPropriedade);
+                  self.inscricaoEstadual(propriedadeSelect.inscricaoEstadual);
+                  self.nome(propriedadeSelect.nome);
+                  self.idProdutor(propriedadeSelect.idProdutor);
+                  self.nomeProdutor(propriedadeSelect.nomeProdutor);
+                  self.idEndereco(propriedadeSelect.idEndereco);
+                  self.rua(propriedadeSelect.rua);
+                  self.numero(propriedadeSelect.numero);
+                  self.idMunicipio(propriedadeSelect.idMunicipio);
+                  self.municipio(propriedadeSelect.municipio);
+                  self.estado(propriedadeSelect.estado);
+                  console.log("teste");
+        };
+
+        self.post = function ()
+        {
+            console.log(ko.toJSON(propriedadeAdd));
+            $.ajax({
+                type: "POST",
+                url: url,                     
+                data: ko.toJSON(propriedadeAdd),
+                contentType: "application/json",
+                success: function (data) {
+                    alert("Registro incluído com sucesso");                                                  
+                    
+                },
+                error: function () {
+                    alert("Falhou");
+                }                   
+          })
+            
+        }
+
+        function GetPropriedades()
+        {
+            $.getJSON(url, function(data) {
+                self.propriedades(data);
+            });
+        }
+    }
+    ko.applyBindings(ViewPropriedade());
+</script>

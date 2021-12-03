@@ -14,6 +14,10 @@
         public virtual string Municipio { get; set; }
         public virtual string Estado { get; set; }
 
+        public PropriedadeDto()
+        {
+
+        }
         public PropriedadeDto(int idPropriedade, string inscricaoEstadual, string nome, int idProdutor, string nomeProdutor, int? idEndereco, string rua, string numero, int idMunicipio, string municipio, string estado)
         {
             IdPropriedade = idPropriedade;
