@@ -62,7 +62,7 @@
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label class="form-label">Informe o CPF do produtor: </label>
-                                    <input class="form-control me-2" type="text" placeholder="000.000.000-00" name="cpf" data-bind="value: cpf">
+                                    <input class="form-control me-2" type="text" placeholder="000.000.000-00" name="cpf" data-bind="value: cpf, hasfocus: cpf.focused">
                                     <div class="text-danger">
                                         {{msgValidaCpf}}
                                     </div>
@@ -95,36 +95,36 @@
                             </div>
                         </div>
                         <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group mb-3">
-                        <label class="form-label">Selecione o município: </label>
-                        <select class="form-select" name="id_municipio" [(ngModel)]="endereco.id_municipio">
-                            <option *ngFor="let municipio of municipios" value="{{ municipio.id }}">{{ municipio.nome }}</option>
-                        </select>
-                        <div *ngIf="validaMunicipio" class="text-danger">
-                            {{ msgValidaMunicipio }}
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Selecione o município: </label>
+                                    <select class="form-select" name="id_municipio" [(ngModel)]="endereco.id_municipio">
+                                        <option *ngFor="let municipio of municipios" value="{{ municipio.id }}">{{ municipio.nome }}</option>
+                                    </select>
+                                    <div *ngIf="validaMunicipio" class="text-danger">
+                                        {{ msgValidaMunicipio }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Rua: </label>
+                                    <input class="form-control" type="text" name="rua" data-bind="value: rua">
+                                    <div *ngIf="validaRua" class="text-danger">
+                                        {{ msgValidaRua }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Numero: </label>
+                                    <input class="form-control" type="number" name="numero" data-bind="value: numero">
+                                    <div *ngIf="validaNumero" class="text-danger">
+                                        {{ msgValidaNumero }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label class="form-label">Rua: </label>
-                        <input class="form-control" type="text" name="rua" data-bind="value: rua" >
-                        <div *ngIf="validaRua" class="text-danger">
-                            {{ msgValidaRua }}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group mb-3">
-                        <label class="form-label">Numero: </label>
-                        <input class="form-control" type="number" name="numero" data-bind="value: numero">
-                        <div *ngIf="validaNumero" class="text-danger">
-                            {{ msgValidaNumero }}
-                        </div>
-                    </div>
-                </div>
-            </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-success">Cadastrar</button>
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
@@ -195,23 +195,25 @@
         <div class="modal-content container">
             <div class="container">
                 <div class="modal-header">
+                    <h5 class="modal-title">Detalhes</h5>
                     <button class="btn btn-close" data-bs-dismiss="modal" #buttonClose></button>
                 </div>
-                <ng-container>
+                <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label class="form-label" id="txtPropriedadeNome" data-bind="value: idPropriedade"><strong> Proprietário: </strong></label>
+                        <label class="form-label" id="txtPropriedadeNome"><strong> Proprietário: </strong><span data-bind="text: nomeProdutor"></span> </label>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label"><strong>Nome da propriedade: </strong>{{ propriedade.nome_propriedade }}</label>
+                        <label class="form-label"><strong>Nome da propriedade: </strong> <span data-bind="text: nome"></span></label>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label"><strong>Município: </strong>{{ municipio.nome }}</label>
+                        <label class="form-label"><strong>Inscricao estadual: </strong> <span data-bind="text: inscricaoEstadual"></span></label>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label"><strong>Inscricao estadual: </strong>{{ propriedade.inscricao_estadual }}</label>
+                        <label class="form-label"><strong>Município: </strong> <span data-bind="text: municipio"></span> - <span data-bind="text: estado"></span> </label>
                     </div>
-                    <a (click)="voltar()" class="btn btn-outline-dark">Voltar</a>
-                    <a href="propriedade-editar/{{ propriedade.id }}" class="btn btn-outline-primary mx-3">Editar</a>
+                    <div class="form-group mb-3">
+                        <label class="form-label"><strong>Rua: </strong> <span data-bind="text: rua"></span>, <span data-bind="text: numero"></span> </label>
+                    </div>
                     <div *ngIf="mostrar">
                         <hr>
                         <h4>Rebanhos</h4>
@@ -240,7 +242,7 @@
                             </tbody>
                         </table>
                     </div>
-                </ng-container>
+                </div>
             </div>
         </div>
     </div>
@@ -253,7 +255,7 @@
     {
         self = this;
         self.propriedades = ko.observableArray([]);
-        
+
         GetPropriedades();
 
         self.idPropriedade = ko.observable("");
@@ -266,9 +268,18 @@
         self.numero = ko.observable("");
         self.idMunicipio = ko.observable("");
         self.municipio = ko.observable("");
-        self.estado = ko.observable("");    
-        self.cpf = ko.observable("");    
-        
+        self.estado = ko.observable("");
+        self.cpf = ko.observable("");
+
+        self.cpf.focused = ko.observable("");
+        self.cpf.focused.subscribe(function(newValue) {
+            console.log(ko.toJSON(cpf));
+            var urlFormatada = "https://localhost:7168/api/produtor/cpf/" + ko.toJSON(cpf).replace('"', "").replace('"', "");
+            $.getJSON(urlFormatada, function(data) {
+                console.log(data);
+            });
+        });
+
         var propriedadeAdd = {
             idPropriedade: self.idPropriedade(),
             inscricaoEstadual: self.inscricaoEstadual(),
@@ -282,12 +293,8 @@
             municipio: self.municipio(),
             estado: self.estado()
         };
-        
+
         self.getPropriedadeSelecionado = function(propriedadeSelect){
-                  self.idPropriedade(propriedadeSelect.idPropriedade);
-                  console.log("teste");
-                 };
-        self.getPropriedasdeSelecionado = function(propriedadeSelect){
                   self.idPropriedade(propriedadeSelect.idPropriedade);
                   self.inscricaoEstadual(propriedadeSelect.inscricaoEstadual);
                   self.nome(propriedadeSelect.nome);
@@ -307,18 +314,18 @@
             console.log(ko.toJSON(propriedadeAdd));
             $.ajax({
                 type: "POST",
-                url: url,                     
+                url: url,
                 data: ko.toJSON(propriedadeAdd),
                 contentType: "application/json",
                 success: function (data) {
-                    alert("Registro incluído com sucesso");                                                  
-                    
+                    alert("Registro incluído com sucesso");
+
                 },
                 error: function () {
                     alert("Falhou");
-                }                   
+                }
           })
-            
+
         }
 
         function GetPropriedades()
