@@ -16,3 +16,13 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.validationMessage {
+  color: tomato;
+}
+
+.toast-per {
+  opacity: 0;
+  transition: all .9s ease;
+  display: block;
+}

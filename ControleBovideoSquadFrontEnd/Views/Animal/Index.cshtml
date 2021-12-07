@@ -22,7 +22,7 @@
                 <td data-bind="text: $data.quantidadeVacinada"></td>
                 <td data-bind="text: $data.especieAnimal.nome"></td>
                 <td data-bind="text: $data.propriedadeAnimal.nome"></td>
-                <td><button type="button" class="btn btn-danger" data-bind="click: cancelarEntrada">Cancelar</button></td>
+                <td><button type="button" class="btn btn-danger" data-bind="click: $parent.cancelarEntrada">Cancelar</button></td>
             </tr>
         </tbody>
     </table>
@@ -39,41 +39,38 @@
                 <form class="row p-3" id="formAnimal" method="POST">
                     <div class="col-md-6">
                         <label for="inputQuantidadeTotal" class="form-label">Quantidade total</label>
-                        <input type="number" name="quantidadeTotal" class="form-control" data-bind="value: quantidadeTotal" id="inputQuantidadeTotal">
+                        <input type="number" name="quantidadeTotal" class="form-control" data-bind="value: quantidadeTotal" id="inputQuantidadeTotal" value=0>
                     </div>
                     <div class="col-md-6">
                         <label for="inputQuantidadeVacinada" class="form-label">Quantidade vacinada</label>
-                        <input type="number" name="quantidadeVacinada" class="form-control" data-bind="value: quantidadeVacinada" id="inputQuantidadeVacinada">
+                        <input type="number" name="quantidadeVacinada" class="form-control" data-bind="value: quantidadeVacinada" id="inputQuantidadeVacinada" value=0>
                     </div>
                     <div class="col-md-4">
                         <label for="inputEspecie" class="form-label">Espécie</label>
                         <select data-bind="options: especies,
-                       optionsText: 'nome',
-                       value: selectedEspecie,
-                       optionsValue: 'idEspecie',
-                       optionsCaption: 'Selecione uma espécie'" name="idEspecie" id="inputEspecie" class="form-select">
+                            optionsText: 'nome',
+                            value: selectedEspecie,
+                            optionsValue: 'idEspecie'" name="idEspecie" id="inputEspecie" class="form-select">
                         </select>
                     </div>
                     <div class="col-md-4">
                         <label for="inputPropriedade" class="form-label">Propriedade</label>
                         <select data-bind="options: propriedades,
-                       optionsText: 'nome',
-                       value: selectedPropriedade,
-                       optionsValue: 'idPropriedade',
-                       optionsCaption: 'Selecione uma propriedade'" name="idPropriedade" id="inputPropriedade" class="form-select">
+                            optionsText: 'nome',
+                            value: selectedPropriedade,
+                            optionsValue: 'idPropriedade'" name="idPropriedade" id="inputPropriedade" class="form-select">
                         </select>
                     </div>
                     <div class="col-md-4">
                         <label for="inputTipoEntrada" class="form-label">Tipo de entrada</label>
                         <select data-bind="options: tiposDeEntrada,
-                       optionsText: 'nome',
-                       optionsValue: 'idTipoDeEntrada',
-                       value: selectedTipoEntrada,
-                       optionsCaption: 'Selecione um tipo de entrada'" name="idTipoEntrada" id="inputTipoEntrada" class="form-select">
+                            optionsText: 'nome',
+                            optionsValue: 'idTipoDeEntrada',
+                            value: selectedTipoEntrada" name="idTipoEntrada" id="inputTipoEntrada" class="form-select">
                         </select>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-bind="click: Save">Cadastrar</button>
+                        <button type="button" class="btn btn-success" data-bind="click: salvarEntrada">Cadastrar</button>
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                     </div>
                 </form>
@@ -82,64 +79,81 @@
     </div>
 </div>
 <script>
-    const modalAnimalEl = document.getElementById('adicionarAnimal')
-    //const modal = new boot
-    function validarQuantidades(quantidadeTotal = 0, quantidadeVacinada = 0) {
-        if (quantidadeTotal <= 0 || quantidadeVacinada <= 0) return { valido: false, msg: "As quantidades devem ser maior que zero" }
-        if (quantidadeVacinada > quantidadeTotal) return { valido: false, msg: "A quantidade vacinada não pode ser maior que a quantidade total" }
-        return { valido: true }
-    }
-
     function appViewModel() {
-        this.animais = ko.observableArray()
-        this.especies = ko.observableArray()
-        this.propriedades = ko.observableArray()
-        this.tiposDeEntrada = ko.observableArray()
-        this.quantidadeTotal = ko.observable()
-        this.quantidadeVacinada = ko.observable()
-        this.selectedEspecie = ko.observable()
-        this.selectedPropriedade = ko.observable()
-        this.selectedTipoEntrada = ko.observable()
-        $.get('https://localhost:7168/api/animal', this.animais)
-        $.get('https://localhost:7168/api/especie', this.especies)
-        $.get('https://localhost:7168/api/propriedade', this.propriedades)
-        $.get('https://localhost:7168/api/tipodeentrada', data => this.tiposDeEntrada(Array.from(data).filter(data => data.nome != 'Compra')))
+        const self = this
+        const apiUrl = 'https://localhost:7168/api/animal'
 
-        this.Save = () => {
+        self.animais = ko.observableArray()
+        self.especies = ko.observableArray()
+        self.propriedades = ko.observableArray()
+        self.tiposDeEntrada = ko.observableArray()
+
+        self.quantidadeTotal = ko.observable("1").extend({
+            required: true,
+            min: 1,
+        })
+        self.quantidadeVacinada = ko.observable("0").extend({
+            required: true,
+            min: 0,
+            validation: {
+                message: 'O saldo vacinado não pode ser maior que o saldo total',
+                validator: value => value <= self.quantidadeTotal()
+            }
+        })
+        self.selectedEspecie = ko.observable("0").extend({
+            required: true,
+        })
+        self.selectedPropriedade = ko.observable("1").extend({
+            required: true,
+        })
+        self.selectedTipoEntrada = ko.observable("1").extend({
+            required: true,
+        })
+
+        $.get(apiUrl, self.animais)
+        $.get('https://localhost:7168/api/especie', self.especies)
+        $.get('https://localhost:7168/api/propriedade', self.propriedades)
+        $.get('https://localhost:7168/api/tipodeentrada', data => self.tiposDeEntrada(Array.from(data).filter(data => data.nome != 'Compra')))
+
+        self.salvarEntrada = () => {
+            let errors = ko.validation.group(this)
+            if (errors().length > 0) return errors.showAllMessages()
+
             const animalDto = {
-                quantidadeTotal: Number(this.quantidadeTotal()),
-                quantidadeVacinada: Number(this.quantidadeVacinada()),
-                idEspecie: Number(this.selectedEspecie()),
-                idPropriedade: Number(this.selectedPropriedade()),
-                idTipoDeEntrada: Number(this.selectedTipoEntrada()),
+                quantidadeTotal: Number(self.quantidadeTotal()),
+                quantidadeVacinada: Number(self.quantidadeVacinada()),
+                idEspecie: Number(self.selectedEspecie()),
+                idPropriedade: Number(self.selectedPropriedade()),
+                idTipoDeEntrada: Number(self.selectedTipoEntrada()),
                 dataDeEntrada: new Date()
             }
 
-            console.log(JSON.stringify(animalDto))
-
-            const validacaoQuantidade = validarQuantidades(animalDto.quantidadeTotal, animalDto.quantidadeVacinada)
-
-            if (validacaoQuantidade.valido) {
-                $.ajax({
-                    url: 'https://localhost:7168/api/animal',
-                    type: 'POST',
-                    data: JSON.stringify(animalDto),
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    success: data => console.log(data),
-                    error: error => console.log(error.responseText)
-                }).then(() => {
-                    $.get('https://localhost:7168/api/animal', this.animais)
-                    $('#adicionarAnimal').modal('hide')
-                })
-            } else {
-                alert(validacaoQuantidade.msg)
-            }
+            $.ajax({
+                url: apiUrl,
+                type: 'POST',
+                data: JSON.stringify(animalDto),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: data => console.log(data),
+                error: error => console.log(error.responseText)
+            }).then(() => {
+                $.get(apiUrl, self.animais)
+                $('#adicionarAnimal').modal('hide')
+            })
         }
 
-        this.cancelarEntrada = () => {
-            console.info('id do animal: ')
+        self.cancelarEntrada = (animal) => {
+            $.ajax({
+                url: `${apiUrl}/${animal.idAnimal}`,
+                type: 'DELETE',
+                success: data => console.log(data),
+                error: error => console.log(error.responseText)
+            }).then(() => {
+                $.get(apiUrl, self.animais)
+                alert('Entrada de animal cancelada')
+            }).catch(alert)
         }
     }
+
     ko.applyBindings(new appViewModel())
 </script>
