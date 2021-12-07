@@ -8,7 +8,7 @@ function formatarData(data){
     return diaF+"/"+mesF+"/"+anoF;
 }
 
-function mostrarNotficacao(msg, erro = false) {
+function mostrarNotificacao(msg, erro = false) {
     const toast = document.getElementById('toast')
     toast.innerHTML = msg
     toast.style.opacity = 1
@@ -23,16 +23,16 @@ function appViewModel() {
         required: true,
         min: 1
     })
-    self.selectedPropriedadeOrigem = ko.observable("1").extend({
+    self.origemSelecionada = ko.observable("1").extend({
         required: true
     })
-    self.selectedPropriedadeDestino = ko.observable("1").extend({
+    self.destinoSelecionado = ko.observable("1").extend({
         required: true
     })
-    self.selectedFinalidadeVenda = ko.observable("1").extend({
+    self.finalidadeDeVendaSelecionada = ko.observable("1").extend({
         required: true
     })
-    self.selectedEspecie = ko.observable("1").extend({
+    self.especieSelecionada = ko.observable("1").extend({
         required: true
     })
 
@@ -49,12 +49,13 @@ function appViewModel() {
     self.salvarVenda = () => {
         let errors = ko.validation.group(this)
         if (errors().length > 0) return errors.showAllMessages()
+
         const vendaDto = {
             quantidade: Number(self.quantidade()),
-            idPropriedadeOrigem: Number(self.selectedPropriedadeOrigem()),
-            idPropriedadeDestino: Number(self.selectedPropriedadeDestino()),
-            idFinalidadeDeVenda: Number(self.selectedFinalidadeVenda()),
-            idEspecie: Number(self.selectedEspecie()),
+            idPropriedadeOrigem: Number(self.origemSelecionada()),
+            idPropriedadeDestino: Number(self.destinoSelecionado()),
+            idFinalidadeDeVenda: Number(self.finalidadeDeVendaSelecionada()),
+            idEspecie: Number(self.especieSelecionada()),
             dataDeVenda: new Date()
         }
 
@@ -64,20 +65,20 @@ function appViewModel() {
             data: JSON.stringify(vendaDto),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
-            success: data => mostrarNotficacao(data),
-            error: error => mostrarNotficacao(error.responseJSON[0])
+            success: console.log,
+            error: error => mostrarNotificacao(error.responseJSON[0])
         }).then(() => {
             $.get(apiUrl, self.vendas)
             $('#adicionarVenda').modal('hide')
-        })
+        }).catch(alert)
     }
 
     self.cancelarVenda = (venda) => {
         $.ajax({
             url: `${apiUrl}/${venda.idVenda}`,
             type: 'DELETE',
-            success: data => console.log(data),
-            error: error => alert(error.responseText)
+            success: console.log,
+            error: console.log
         }).then(() => {
             $.get(apiUrl, self.vendas)
             alert('Registro de venda cancelado')

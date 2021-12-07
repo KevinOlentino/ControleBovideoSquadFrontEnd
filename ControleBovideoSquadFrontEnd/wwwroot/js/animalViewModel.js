@@ -2,11 +2,6 @@ function appViewModel() {
     const self = this
     const apiUrl = 'https://localhost:7168/api/animal'
 
-    self.animais = ko.observableArray()
-    self.especies = ko.observableArray()
-    self.propriedades = ko.observableArray()
-    self.tiposDeEntrada = ko.observableArray()
-
     self.quantidadeTotal = ko.observable("1").extend({
         required: true,
         min: 1,
@@ -19,20 +14,26 @@ function appViewModel() {
             validator: value => value <= self.quantidadeTotal()
         }
     })
-    self.selectedEspecie = ko.observable("0").extend({
+    self.especieSelecionada = ko.observable("1").extend({
         required: true,
     })
-    self.selectedPropriedade = ko.observable("1").extend({
+    self.propriedadeSelecionada = ko.observable("1").extend({
         required: true,
     })
-    self.selectedTipoEntrada = ko.observable("1").extend({
+    self.tipoDeEntradaSelecionada = ko.observable("1").extend({
         required: true,
     })
+
+    self.animais = ko.observableArray()
+    self.especies = ko.observableArray()
+    self.propriedades = ko.observableArray()
+    self.tiposDeEntrada = ko.observableArray()
 
     $.get(apiUrl, self.animais)
     $.get('https://localhost:7168/api/especie', self.especies)
     $.get('https://localhost:7168/api/propriedade', self.propriedades)
-    $.get('https://localhost:7168/api/tipodeentrada', data => self.tiposDeEntrada(Array.from(data).filter(data => data.nome != 'Compra')))
+    $.get('https://localhost:7168/api/tipodeentrada', data => self.tiposDeEntrada(data.filter(data => data.nome != 'Compra')))
+
 
     self.salvarEntrada = () => {
         let errors = ko.validation.group(this)
@@ -41,9 +42,9 @@ function appViewModel() {
         const animalDto = {
             quantidadeTotal: Number(self.quantidadeTotal()),
             quantidadeVacinada: Number(self.quantidadeVacinada()),
-            idEspecie: Number(self.selectedEspecie()),
-            idPropriedade: Number(self.selectedPropriedade()),
-            idTipoDeEntrada: Number(self.selectedTipoEntrada()),
+            idEspecie: Number(self.especieSelecionada()),
+            idPropriedade: Number(self.propriedadeSelecionada()),
+            idTipoDeEntrada: Number(self.tipoDeEntradaSelecionada()),
             dataDeEntrada: new Date()
         }
 
@@ -53,20 +54,20 @@ function appViewModel() {
             data: JSON.stringify(animalDto),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
-            success: data => console.log(data),
-            error: error => console.log(error.responseText)
+            success: console.log,
+            error: console.log
         }).then(() => {
             $.get(apiUrl, self.animais)
             $('#adicionarAnimal').modal('hide')
-        })
+        }).catch(alert)
     }
 
     self.cancelarEntrada = (animal) => {
         $.ajax({
             url: `${apiUrl}/${animal.idAnimal}`,
             type: 'DELETE',
-            success: data => console.log(data),
-            error: error => console.log(error)
+            success: console.log,
+            error: console.log
         }).then(() => {
             $.get(apiUrl, self.animais)
             alert('Entrada de animal cancelada')

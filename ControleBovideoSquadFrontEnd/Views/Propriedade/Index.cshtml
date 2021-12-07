@@ -4,7 +4,7 @@
     ViewData["Title"] = "Propriedades";
 }
 
-<h1 class="display-5 text-center">Propriedades</h1>
+<h1 class="display-5 text-center">Lista de propriedades</h1>
 
 <div class="container px-4 py-4">
     <p class="blockquote-footer text-center">
@@ -16,7 +16,7 @@
             Adicionar
         </button>
         <div class="d-flex col-md-4 mt-2">
-            <input class="form-control me-2" type="search" placeholder="Pesquisar por CPF" [(ngModel)]="CPF" aria-label="Search">
+            <input class="form-control me-2" type="search" placeholder="Pesquisar por IE" aria-label="Search" maxlength="9">
             <button class="btn btn-outline-success" type="submit" (click)="pesquisarPorCPF()">Procurar</button>
         </div>
     </div>

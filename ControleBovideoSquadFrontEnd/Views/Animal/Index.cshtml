@@ -1,9 +1,8 @@
-﻿
-
-<div class="container col-xxl-8 px-4 py-4">
-    <h1 class="display-5 text-center">Lista de Entrada de animais</h1>
+﻿<div class="container col-xxl-8 px-4 py-4">
+    <h1 class="display-5 text-center">Lista das entradas de animais</h1>
+    <br>
     <p class="blockquote-footer text-center">
-        Selecione um animal para acessar as informações
+        Listagem, inserção e cancelamento das entradas de animais
     </p>
 </div>
 <button type="button" data-bs-toggle="modal" href="#adicionarAnimal" role="button" class="btn btn-success col-md-3 mt-2"> Adicionar</button>
@@ -51,7 +50,7 @@
                         <label for="inputEspecie" class="form-label">Espécie</label>
                         <select data-bind="options: especies,
                             optionsText: 'nome',
-                            value: selectedEspecie,
+                            value: especieSelecionada,
                             optionsValue: 'idEspecie'" name="idEspecie" id="inputEspecie" class="form-select">
                         </select>
                     </div>
@@ -59,7 +58,7 @@
                         <label for="inputPropriedade" class="form-label">Propriedade</label>
                         <select data-bind="options: propriedades,
                             optionsText: 'nome',
-                            value: selectedPropriedade,
+                            value: propriedadeSelecionada,
                             optionsValue: 'idPropriedade'" name="idPropriedade" id="inputPropriedade" class="form-select">
                         </select>
                     </div>
@@ -68,7 +67,7 @@
                         <select data-bind="options: tiposDeEntrada,
                             optionsText: 'nome',
                             optionsValue: 'idTipoDeEntrada',
-                            value: selectedTipoEntrada" name="idTipoEntrada" id="inputTipoEntrada" class="form-select">
+                            value: tipoDeEntradaSelecionada" name="idTipoEntrada" id="inputTipoEntrada" class="form-select">
                         </select>
                     </div>
                     <div class="modal-footer">

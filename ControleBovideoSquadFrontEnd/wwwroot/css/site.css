@@ -26,3 +26,8 @@ body {
   transition: all .9s ease;
   display: block;
 }
+
+.hide-per {
+  opacity: 0;
+  transition: .38s ease-in;
+}

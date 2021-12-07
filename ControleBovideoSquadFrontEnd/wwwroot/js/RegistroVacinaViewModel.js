@@ -39,10 +39,12 @@ var RegistroVacinaViewModel = function () {
         if (value != undefined) {
             GetRebanho(value)
             GetRegistroVacina(value)
+            document.getElementById('table-content').style.opacity = '1'
             document.getElementById("buttonAdicionar").disabled = false;
         }
         else {
             self.registrovacinas([])
+            document.getElementById('table-content').style.opacity = '0'
             document.getElementById("buttonAdicionar").disabled = true;
         }
 
@@ -143,7 +145,7 @@ var RegistroVacinaViewModel = function () {
             data: ko.toJSON(registrovacina),
             contentType: "application/json",
             success: function (data) {
-                alert("Registro incluído com sucesso");
+                alert("Registro incluï¿½do com sucesso");
                 console.log(self.selectedPropriedade())
                 GetRegistroVacina(self.selectedPropriedade());
                 $('#adicionarRegistroVacina').modal('hide')
