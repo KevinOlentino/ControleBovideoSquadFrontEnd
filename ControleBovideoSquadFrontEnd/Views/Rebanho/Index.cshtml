@@ -25,6 +25,7 @@
         </tbody>
     </table>
 </div>
+@section scripts{
 <script>
     function appViewModel() {
         this.rebanhos = ko.observableArray();
@@ -34,3 +35,4 @@
     }
     ko.applyBindings(new appViewModel())
 </script>
+}
