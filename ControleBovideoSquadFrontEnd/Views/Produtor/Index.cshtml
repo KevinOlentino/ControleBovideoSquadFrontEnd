@@ -44,7 +44,7 @@
         <div class="modal-content container">
             <div class="container">
                 <div class="modal-header">
-                    <button class="btn btn-close" data-bs-dismiss="modal" #buttonClose></button>
+                    <button class="btn btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form class="row p-3 needs-validation" id="formProdutor" method="POST" data-bind="submit: Save">
                     <div class="col-md-6">
@@ -152,11 +152,11 @@
                             </thead>
                             <tbody data-bind="foreach: rebanhos">
                                 <tr>
-                                    <td data-bind="text: propriedade.nome"></td>
+                                    <td data-bind="text: nomePropriedade"></td>
                                     <td data-bind="text: quantidadeTotal"></td>
                                     <td data-bind="text: quantidadeVacinadaAftosa"></td>
                                     <td data-bind="text: quantidadeVacinadaBrucelose"></td>
-                                    <td data-bind="text: especie.nome"></td>
+                                    <td data-bind="text: especie"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -166,7 +166,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="editarProdutor" aria-hidden="true" aria-labelledby="editarProdutorLabel" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -268,7 +267,7 @@
         self.DetalharProdutor = function(value){
             console.log(value)
             getRebanhos(value.cpf);
-            getPropriedades(value.cpf)
+            getPropriedades(value.idProdutor)
         }
 
        function getRebanhos(value) {
@@ -320,7 +319,9 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    FormatarCPFAoListar(data);
+                    data.forEach(function(value){
+                        FormatarCPF(value);
+                    })                    
                     self.produtores(data);
                 },
                 error: function (error) {
@@ -337,20 +338,20 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    self.getprodutorselecionado(data);
-                    getPropriedades(data.cpf)
+                    FormatarCPF(data)
+                    self.getprodutorselecionado(data);                   
+                    getPropriedades(data.idProdutor)
                     getRebanhos(data.cpf)
                 },
                 error: function (error) {
                     alert("Erro");
+                    console.log(error);
                 }
             })
         }
 
-        function FormatarCPFAoListar(value) {
-            value.forEach(function (item) {
-                item.cpf = item.cpf.match(/.{1,3}/g).join(".").replace(/\.(?=[^.]*$)/, "-");
-            })
+        function FormatarCPF(value) {            
+                value.cpf = value.cpf.match(/.{1,3}/g).join(".").replace(/\.(?=[^.]*$)/, "-");            
         }
 
         self.Save = function () {
@@ -362,9 +363,10 @@
                 success: function (data) {
                     alert("Registro incluído com sucesso");
                     GetProdutores();
+                    $('#adicionarProdutor').modal('hide') 
                 },
-                error: function () {
-                    alert("Falhou");
+                error: function (error) {
+                    alert(error.responseJSON);
                 }
             })
             console.log(ko.toJSON(produtorDados));

@@ -9,8 +9,8 @@
         Selecione um produtor e uma propriedade para acessar as informações
     </p>
     <div class="row d-flex justify-content-between">
-        <button type="button" data-bs-toggle="modal" href="#adicionarProdutor" role="button"
-            class="btn btn-success col-md-3 mt-2">
+        <button type="button" data-bs-toggle="modal" href="#adicionarRegistroVacina" role="button"
+            class="btn btn-success col-md-3 mt-2" data-bind="click: clearLabels" id="buttonAdicionar" disabled>
             Adicionar
         </button>
         <div class="d-flex col-md-4 mt-2">            
@@ -44,61 +44,81 @@
                 </tr>
             </thead>
             <tbody data-bind="foreach: registrovacinas">
-                <tr>
+                <tr data-bind="click: getRegistroSelecionado">
                     <td data-bind="text: quantidade"></td>
                     <td data-bind="text: vacina"></td>
                     <td data-bind="text: especie"></td>
                     <td data-bind="text: dataDaVacina"></td>
-                    <td><a class="btn btn-danger fas fa-edit">Cancelar</a></td>
+                    <td><a href="#cancelarRegistroVacina" data-bs-toggle="modal" class="btn btn-danger fas fa-edit">Cancelar</a></td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
-<div class="modal fade" #modal id="adicionarProdutor" aria-hidden="true" aria-labelledby="adicionarProdutorLabel"
+<div class="modal fade" id="adicionarRegistroVacina" aria-hidden="true" aria-labelledby="adicionarRegistroVacinaLabel"
      tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content container">
             <div class="container">
                 <div class="modal-header">
-                    <button class="btn btn-close" data-bs-dismiss="modal" #buttonClose></button>
+                    <button class="btn btn-close" data-bs-dismiss="modal" ></button>
                 </div>
-                <form class="row p-3" id="formProdutor" method="POST">
+                <form class="row p-3 needs-validation" id="formProdutor" method="POST" data-bind="submit: Save">
                     <div class="col-md-6">
-                        <label for="inputNome" class="form-label">Quantidade</label>
-                        <input type="text" name="nome" class="form-control" data-bind="value: quantidade" id="inputNomeAdd">
+                        <label for="inputQuantidade" class="form-label">Quantidade</label>
+                        <input type="text" name="quantidade" class="form-control" data-bind="value: quantidade" id="inputQuantidadeAdd" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="inputCPF" class="form-label">Data Da Vacina</label>
-                        <input type="date" name="cpf" class="form-control" data-bind="value: dataDaVacina" id="inputCPFAdd">
-
+                        <label for="inputDataDaVacina" class="form-label">Data Da Vacina</label>
+                        <input type="date" name="dataDaVacina" class="form-control" data-bind="value: dataDaVacina" id="inputDataDaVacinaAdd" required>
                     </div>
                     <div class="col-md-10">
-                        <label for="inputRua" class="form-label">Especie</label>                        
+                        <label for="inputRebanho" class="form-label">Especie</label>                        
                         <select data-bind="options: rebanho,
                        optionsText: 'especie',
                        value: idRebanho,
                        optionsValue: 'idRebanho',
-                       optionsCaption: 'Selecione uma Especie'" name="idRebanho" id="inputRebanho" class="form-select">
+                       optionsCaption: 'Selecione uma Especie'" name="idRebanho" id="inputRebanho" class="form-select" required>
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="inputState" class="form-label">Vacina</label>
+                        <label for="inputVacina" class="form-label">Vacina</label>
                         <select data-bind="options: vacinas,
                        optionsText: 'doenca',
                        value: idVacina,
                        optionsValue: 'idVacina',
-                       optionsCaption: 'Selecione uma Vacina'" name="idVacina" id="inputVaicna" class="form-select">
+                       optionsCaption: 'Selecione uma Vacina'" name="idVacina" id="inputVacina" class="form-select" required>
                         </select>                        
                     </div>                     
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-bind="click: Save">Cadastrar</button>
+                        <button type="submit" class="btn btn-success">Cadastrar</button>
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+</div>
+<div class="modal fade" id="cancelarRegistroVacina" aria-hidden="true" aria-labelledby="cancelarRegistroVacinaLabel"
+     tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content container">
+      <div class="row p-3">
+        <h5 class="card-title">Data:<span data-bind="text: dataDaVacina"></span></h5>
+        <p class="card-text">Quantidade Vacinada: <span data-bind="text: quantidade"></span></p>
+        <p class="card-text">Vacina: <span data-bind="text: vacina"></span></p>        
+        <p class="card-text">Especie: <span data-bind="text: especie"></span></p>
+        <div>
+          <div class="modal-footer">
+            <p>Deseja realmente excluir este registro:</p>
+            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" data-bind="click: cancelarRegistroVacina">Sim
+            </button>
+            <button  class="btn btn-primary" data-bs-dismiss="modal">Não</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <script type="text/javascript">
 
@@ -116,41 +136,62 @@
 
         self.idRegistroVacinacao = ko.observable();
         self.idVacina = ko.observable();
+        self.vacina = ko.observable();
+        self.especie = ko.observable();
         self.idRebanho = ko.observable();
         self.quantidade = ko.observable();
-        self.dataDaVacina = ko.observable();
-        self.dataDeCadastro = ko.observable();
-
-        var registrovacina = {
-            idRegistroVacinacao: ko.observable,
-            idVacina: ko.observable,
-            idRebanho: ko.observable,
-            quantidade: ko.observable,
-            dataDaVacina: ko.observable,
-            dataDeCadastro: ko.observable
-        }
+        self.dataDaVacina = ko.observable();        
 
         GetProdutores();
         GetVacinas();
+    
+       var registrovacina = {            
+            idVacina: self.idVacina,
+            idRebanho: self.idRebanho,
+            quantidade: self.quantidade,
+            dataDaVacina: self.dataDaVacina,           
+        }
 
         self.selectedProdutor.subscribe(function (value) {
             if (value != undefined)
                 GetPropriedades(value);
             else
-                self.propriedades([])
+                self.propriedades([])                                            
         }, this)
 
         self.selectedPropriedade.subscribe(function (value) {
             if (value != undefined) {
                 GetRebanho(value)
                 GetRegistroVacina(value)
+                document.getElementById("buttonAdicionar").disabled = false;
             }
-            else
-                self.rebanho([])
+            else{
+                self.registrovacinas([])
+                document.getElementById("buttonAdicionar").disabled = true;
+            }               
 
             console.log(value);
-
         })
+
+        self.getRegistroSelecionado = function(_registro){
+            self.idRegistroVacinacao(_registro.idRegistroVacina);
+            self.idVacina(_registro.idVacina);
+            self.idRebanho(_registro.idRebanho);
+            self.quantidade(_registro.quantidade);
+            self.dataDaVacina(_registro.dataDaVacina);
+            self.vacina(_registro.vacina);
+            self.especie(_registro.especie);  
+        }
+
+        self.clearLabels = function(_registro){
+            self.idRegistroVacinacao(0);
+            self.idVacina("");
+            self.idRebanho("");
+            self.quantidade("");
+            self.dataDaVacina("");
+            self.vacina("");
+            self.especie("");  
+        }        
 
         function GetRegistroVacina(propriedadeInscricao) {
             $.ajax({
@@ -168,6 +209,22 @@
                     console.log(self.registrovacinas())
                 },
                 error: function (error) {
+                    alert("Erro");
+                }
+            })
+        }
+
+        self.cancelarRegistroVacina = () => {          
+            $.ajax({
+                type: "delete",
+                url: `https://localhost:7168/api/RegistroVacina/${self.idRegistroVacinacao()}`,                
+                success: function () {
+                    alert("Registro cancelado com sucesso")
+                    console.log(self.selectedPropriedade())
+                    GetRegistroVacina(self.selectedPropriedade()); 
+                },
+                error: function (error) {
+                    console.log(error)
                     alert("Erro");
                 }
             })
@@ -204,14 +261,30 @@
                 }
             })
         }
-        self.Save  = () => {
-
+        self.Save  = () => {            
+             $.ajax({
+                type: "POST",
+                url: "https://localhost:7168/api/RegistroVacina",
+                data: ko.toJSON(registrovacina),
+                contentType: "application/json",
+                success: function (data) {
+                    alert("Registro incluído com sucesso");     
+                    console.log(self.selectedPropriedade())
+                    GetRegistroVacina(self.selectedPropriedade());  
+                    $('#adicionarRegistroVacina').modal('hide')             
+                },
+                error: function (error) {                    
+                    alert(error.responseJSON);
+                }
+            })
+            console.log(ko.toJSON(registrovacina));
         }
 
-        self.GetPropriedades = function (produtorCPF) {
+        self.GetPropriedades = function (produtorID) {
+            console.log(produtorID)
             $.ajax({
                 type: "GET",
-                url: `https://localhost:7168/api/Propriedade/${produtorCPF}/Produtor`,
+                url: `https://localhost:7168/api/Propriedade/${produtorID}/Produtor`,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {                    
@@ -243,14 +316,8 @@
         }
 
         function AlterDateFormat(value){
-            console.log(value)            
-            console.log(value.indexOf("T")); 
-            console.log(value.slice(5,7))                       
-            console.log(value.slice(8,10))
-            var dd = value.slice(8,10);;
-            if(dd < 10) dd = '0' + dd;
-            var mm = value.slice(5,7);
-            if(mm < 10) mm = '0' + mm;
+            var dd = value.slice(8,10);            
+            var mm = value.slice(5,7);            
             var yyyy = value.slice(0,4);
 
             return String(dd + "/" + mm + "/" + yyyy)
