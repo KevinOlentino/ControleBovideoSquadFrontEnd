@@ -142,7 +142,7 @@
                             </tbody>
                         </table>
                     </div>
-                     <div class="col-lg-12">
+                    <div class="col-lg-12">
                         <h1 class="display-6 text-center">Rebanhos</h1>
                         <table class="table table-striped table-hover">
                             <thead>
@@ -161,6 +161,29 @@
                                     <td data-bind="text: quantidadeVacinadaAftosa"></td>
                                     <td data-bind="text: quantidadeVacinadaBrucelose"></td>
                                     <td data-bind="text: especie"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-12">
+                        <h1 class="display-6 text-center">Vendas</h1>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Quantidade</th>
+                                    <th scope="col">Propriedade de origem</th>
+                                    <th scope="col">Propriedade de destino</th>
+                                    <th scope="col">Espécie</th>
+                                    <th scope="col">Finalidade de venda</th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: vendasDoProdutor">
+                                <tr>
+                                    <td data-bind="text: quantidade"></td>
+                                    <td data-bind="text: propriedadeOrigem.nome"></td>
+                                    <td data-bind="text: propriedadeDestino.nome"></td>
+                                    <td data-bind="text: especie.nome"></td>
+                                    <td data-bind="text: finalidadeDeVenda.nome"></td>
                                 </tr>
                             </tbody>
                         </table>

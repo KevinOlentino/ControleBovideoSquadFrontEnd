@@ -19,8 +19,8 @@
                 <td data-bind="text: $data.quantidadeTotal"></td>
                 <td data-bind="text: $data.quantidadeVacinadaAftosa"></td>
                 <td data-bind="text: $data.quantidadeVacinadaBrucelose"></td>
-                <td data-bind="text: $data.especie.nome"></td>
-                <td data-bind="text: $data.propriedade.nome"></td>
+                <td data-bind="text: $data.especie"></td>
+                <td data-bind="text: $data.nomePropriedade"></td>
             </tr>
         </tbody>
     </table>
@@ -29,6 +29,7 @@
     function appViewModel() {
         this.rebanhos = ko.observableArray();
         $.get('https://localhost:7168/api/rebanho', data => {
+            console.log(data)
             this.rebanhos(data)
         })
     }

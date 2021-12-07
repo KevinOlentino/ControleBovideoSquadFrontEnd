@@ -17,6 +17,7 @@ var ProdutorViewModel = function () {
     self.propriedades = ko.observableArray([]);
     self.rebanhos = ko.observableArray([]);
     self.municipioEdit = ko.observableArray([]);
+    self.vendasDoProdutor = ko.observableArray([]);
 
     GetProdutores();
     GetMunicipios();
@@ -47,6 +48,7 @@ var ProdutorViewModel = function () {
         console.log(value)
         getRebanhos(value.cpf);
         getPropriedades(value.idProdutor)
+        self.getVendasDoProdutor(value.cpf)
     }
 
     function getRebanhos(value) {
@@ -195,6 +197,17 @@ var ProdutorViewModel = function () {
         self.municipio(_produtor.municipio)
         self.estado(_produtor.estado)
         self.idMunicipio(_produtor.idMunicipio)
+    }
+
+    self.getVendasDoProdutor = (cpfProdutor) => {
+        $.ajax({
+            type: "GET",
+            url: `https://localhost:7168/api/Venda/produtor/${cpfProdutor}`,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: data => self.vendasDoProdutor(data),
+            error: alert
+        })
     }
 }
 ko.applyBindings(ProdutorViewModel());
