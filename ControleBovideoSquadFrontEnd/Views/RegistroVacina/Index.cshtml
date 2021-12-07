@@ -1,16 +1,15 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Registro Vacina";
 }
+
 <div class="container">
     <h1 class="display-5 text-center">Lista de Registro de Vacinas</h1>
     <p class="blockquote-footer text-center">
         Selecione um produtor e uma propriedade para acessar as informações
     </p>
     <div class="row d-flex justify-content-between">
-        <button type="button" data-bs-toggle="modal" href="#adicionarProdutor" role="button"
-            class="btn btn-success col-md-3 mt-2">
+        <button type="button" data-bs-toggle="modal" href="#adicionarRegistroVacina" role="button"
+            class="btn btn-success col-md-3 mt-2" data-bind="click: clearLabels" id="buttonAdicionar" disabled>
             Adicionar
         </button>
         <div class="d-flex col-md-4 mt-2">            
@@ -44,55 +43,54 @@
                 </tr>
             </thead>
             <tbody data-bind="foreach: registrovacinas">
-                <tr>
+                <tr data-bind="click: getRegistroSelecionado">
                     <td data-bind="text: quantidade"></td>
                     <td data-bind="text: vacina"></td>
                     <td data-bind="text: especie"></td>
                     <td data-bind="text: dataDaVacina"></td>
-                    <td><a class="btn btn-danger fas fa-edit">Cancelar</a></td>
+                    <td><a href="#cancelarRegistroVacina" data-bs-toggle="modal" class="btn btn-danger fas fa-edit">Cancelar</a></td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
-<div class="modal fade" #modal id="adicionarProdutor" aria-hidden="true" aria-labelledby="adicionarProdutorLabel"
+<div class="modal fade" id="adicionarRegistroVacina" aria-hidden="true" aria-labelledby="adicionarRegistroVacinaLabel"
      tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content container">
             <div class="container">
                 <div class="modal-header">
-                    <button class="btn btn-close" data-bs-dismiss="modal" #buttonClose></button>
+                    <button class="btn btn-close" data-bs-dismiss="modal" ></button>
                 </div>
-                <form class="row p-3" id="formProdutor" method="POST">
+                <form class="row p-3 needs-validation" id="formProdutor" method="POST" data-bind="submit: Save">
                     <div class="col-md-6">
-                        <label for="inputNome" class="form-label">Quantidade</label>
-                        <input type="text" name="nome" class="form-control" data-bind="value: quantidade" id="inputNomeAdd">
+                        <label for="inputQuantidade" class="form-label">Quantidade</label>
+                        <input type="text" name="quantidade" class="form-control" data-bind="value: quantidade" id="inputQuantidadeAdd" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="inputCPF" class="form-label">Data Da Vacina</label>
-                        <input type="date" name="cpf" class="form-control" data-bind="value: dataDaVacina" id="inputCPFAdd">
-
+                        <label for="inputDataDaVacina" class="form-label">Data Da Vacina</label>
+                        <input type="date" name="dataDaVacina" class="form-control" data-bind="value: dataDaVacina" id="inputDataDaVacinaAdd" required>
                     </div>
                     <div class="col-md-10">
-                        <label for="inputRua" class="form-label">Especie</label>                        
+                        <label for="inputRebanho" class="form-label">Especie</label>                        
                         <select data-bind="options: rebanho,
                        optionsText: 'especie',
                        value: idRebanho,
                        optionsValue: 'idRebanho',
-                       optionsCaption: 'Selecione uma Especie'" name="idRebanho" id="inputRebanho" class="form-select">
+                       optionsCaption: 'Selecione uma Especie'" name="idRebanho" id="inputRebanho" class="form-select" required>
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="inputState" class="form-label">Vacina</label>
+                        <label for="inputVacina" class="form-label">Vacina</label>
                         <select data-bind="options: vacinas,
                        optionsText: 'doenca',
                        value: idVacina,
                        optionsValue: 'idVacina',
-                       optionsCaption: 'Selecione uma Vacina'" name="idVacina" id="inputVaicna" class="form-select">
+                       optionsCaption: 'Selecione uma Vacina'" name="idVacina" id="inputVacina" class="form-select" required>
                         </select>                        
                     </div>                     
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-bind="click: Save">Cadastrar</button>
+                        <button type="submit" class="btn btn-success">Cadastrar</button>
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                     </div>
                 </form>
@@ -100,163 +98,27 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-
-    var RegistroVacinaViewModel = function () {
-        var self = this;
-
-        self.registrovacinas = ko.observableArray([]);
-        self.produtores = ko.observableArray([]);
-        self.propriedades = ko.observableArray([]);
-        self.rebanho = ko.observableArray([]);
-        self.vacinas = ko.observableArray([]);
-
-        self.selectedProdutor = ko.observable();
-        self.selectedPropriedade = ko.observable();        
-
-        self.idRegistroVacinacao = ko.observable();
-        self.idVacina = ko.observable();
-        self.idRebanho = ko.observable();
-        self.quantidade = ko.observable();
-        self.dataDaVacina = ko.observable();
-        self.dataDeCadastro = ko.observable();
-
-        var registrovacina = {
-            idRegistroVacinacao: ko.observable,
-            idVacina: ko.observable,
-            idRebanho: ko.observable,
-            quantidade: ko.observable,
-            dataDaVacina: ko.observable,
-            dataDeCadastro: ko.observable
-        }
-
-        GetProdutores();
-        GetVacinas();
-
-        self.selectedProdutor.subscribe(function (value) {
-            if (value != undefined)
-                GetPropriedades(value);
-            else
-                self.propriedades([])
-        }, this)
-
-        self.selectedPropriedade.subscribe(function (value) {
-            if (value != undefined) {
-                GetRebanho(value)
-                GetRegistroVacina(value)
-            }
-            else
-                self.rebanho([])
-
-            console.log(value);
-
-        })
-
-        function GetRegistroVacina(propriedadeInscricao) {
-            $.ajax({
-                type: "GET",
-                url: `https://localhost:7168/api/RegistroVacina/${propriedadeInscricao}`,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    data.forEach(function(value){
-                        value.dataDaVacina = AlterDateFormat(value.dataDaVacina);
-                    })
-
-                    self.registrovacinas(data);                    
-                    //console.log(data)
-                    console.log(self.registrovacinas())
-                },
-                error: function (error) {
-                    alert("Erro");
-                }
-            })
-        }
-
-        function GetProdutores() {
-            $.ajax({
-                type: "GET",
-                url: "https://localhost:7168/api/Produtor",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    self.produtores(data);
-                    console.log(self.produtores())
-                },
-                error: function (error) {
-                    alert("Erro");
-                }
-            });
-        }
-
-        function GetVacinas() {
-            $.ajax({
-                type: "GET",
-                url: "https://localhost:7168/api/Vacina",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    self.vacinas(data);
-                    console.log(self.vacinas());
-                },
-                error: function (error) {
-                    alert("Erro");
-                }
-            })
-        }
-        self.Save  = () => {
-
-        }
-
-        self.GetPropriedades = function (produtorCPF) {
-            $.ajax({
-                type: "GET",
-                url: `https://localhost:7168/api/Propriedade/${produtorCPF}/Produtor`,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {                    
-                    self.propriedades(data);
-                },
-                error: function (error) {
-                    alert("Erro");
-                }
-            })
-        }
-
-        self.GetRebanho = function (propriedadeInscricao) {
-            $.ajax({
-                type: "GET",
-                url: `https://localhost:7168/api/Rebanho/${propriedadeInscricao}/Propriedade`,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    self.rebanho(data);
-                    console.log(self.rebanho())
-                    console.log(data.forEach(function(value){
-                        console.log(value.especie.nome)
-                    }));
-                },
-                error: function (error) {
-                    alert("Erro");
-                }
-            })
-        }
-
-        function AlterDateFormat(value){
-            console.log(value)            
-            console.log(value.indexOf("T")); 
-            console.log(value.slice(5,7))                       
-            console.log(value.slice(8,10))
-            var dd = value.slice(8,10);;
-            if(dd < 10) dd = '0' + dd;
-            var mm = value.slice(5,7);
-            if(mm < 10) mm = '0' + mm;
-            var yyyy = value.slice(0,4);
-
-            return String(dd + "/" + mm + "/" + yyyy)
-        }
-
-    }
-
-    ko.applyBindings(RegistroVacinaViewModel)
-</script>
+<div class="modal fade" id="cancelarRegistroVacina" aria-hidden="true" aria-labelledby="cancelarRegistroVacinaLabel"
+     tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content container">
+      <div class="row p-3">
+        <h5 class="card-title">Data:<span data-bind="text: dataDaVacina"></span></h5>
+        <p class="card-text">Quantidade Vacinada: <span data-bind="text: quantidade"></span></p>
+        <p class="card-text">Vacina: <span data-bind="text: vacina"></span></p>        
+        <p class="card-text">Especie: <span data-bind="text: especie"></span></p>
+        <div>
+          <div class="modal-footer">
+            <p>Deseja realmente excluir este registro:</p>
+            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" data-bind="click: cancelarRegistroVacina">Sim
+            </button>
+            <button  class="btn btn-primary" data-bs-dismiss="modal">Não</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@section scripts{
+    <script src='../js/RegistroVacinaViewModel.js'></script>
+}
