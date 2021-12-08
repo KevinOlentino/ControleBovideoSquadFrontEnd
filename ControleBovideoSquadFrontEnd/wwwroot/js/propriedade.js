@@ -39,61 +39,8 @@ const url = "https://localhost:7168/api/propriedade";
         self.numero.message = ko.observable("");
 
         self.cpf.focused = ko.observable("");
-        self.cpf.focused.subscribe(function(newValue) { 
-            console.log("aqui" + validarCpf); 
-            if(validarCpf){
-                validarCpf = false;
-            }else{
-                if(cpf() == ""){
-                    self.cpf.message("");
-                    return;
-                }
-                GetCpf();
-                
-                validarCpf = true;
-            }
-        });
         self.cpfEditar.focused = ko.observable("");
-        self.cpfEditar.focused.subscribe(function(newValue) { 
-            console.log("aqui" + validarCpf); 
-            if(validarCpfEditar){
-                validarCpfEditar = false;
-            }else{
-                if(cpf() == ""){
-                    self.cpf.message("");
-                    return;
-                }
-                GetCpf();
-                
-                validarCpfEditar = true;
-            }
-        });
-
         self.inscricaoEstadual.focused = ko.observable("");
-        self.inscricaoEstadual.focused.subscribe(function(newValue) {  
-            if(validarInscricaoEstadual){
-                validarInscricaoEstadual = false;
-                console.log("data");
-            }else{
-                if(inscricaoEstadual() == ""){
-                    self.inscricaoEstadual.message("");
-                    return;
-                }
-                self.inscricaoEstadual.message("teste");
-
-                var urlFormatada = "https://localhost:7168/api/Propriedade/validainscricao/" + inscricaoEstadual();
-                $.getJSON(urlFormatada, function(data) {
-                    //cpfIdProdutor = data.idProdutor;
-                    console.log(data);
-                }).fail(function(error) {
-                    console.log(error.responseText);
-
-                    self.inscricaoEstadual.message(error.responseText);
-                });
-                
-                validarInscricaoEstadual = true;
-            }
-        });
 
         var propriedadeAdd = {
             idPropriedade: self.idPropriedade,
@@ -108,6 +55,53 @@ const url = "https://localhost:7168/api/propriedade";
             municipio: self.municipio,
             estado: self.estado
         };
+
+        self.cpf.focused.subscribe(function(newValue) { 
+            if(validarCpf){
+                validarCpf = false;
+            }else{
+                if(cpf() == ""){
+                    self.cpf.message("");
+                    return;
+                }
+                GetCpf();
+                validarCpf = true;
+            }
+        });
+
+        self.cpfEditar.focused.subscribe(function(newValue) { 
+            if(validarCpfEditar){
+                validarCpfEditar = false;
+            }else{
+                if(cpf() == ""){
+                    self.cpf.message("");
+                    return;
+                }
+                GetCpf();
+                validarCpfEditar = true;
+            }
+        });
+
+        self.inscricaoEstadual.focused.subscribe(function(newValue) {  
+            if(validarInscricaoEstadual){
+                validarInscricaoEstadual = false;
+            }else{
+                if(inscricaoEstadual() == ""){
+                    self.inscricaoEstadual.message("");
+                    return;
+                }
+                self.inscricaoEstadual.message("teste");
+
+                var urlFormatada = "https://localhost:7168/api/Propriedade/validainscricao/" + inscricaoEstadual();
+                $.getJSON(urlFormatada, function(data) {
+                }).fail(function(error) {
+                    self.inscricaoEstadual.message(error.responseText);
+                });
+                
+                validarInscricaoEstadual = true;
+            }
+        });
+
 
         self.limpaCampo = function(){
             self.idPropriedade("");
@@ -129,9 +123,9 @@ const url = "https://localhost:7168/api/propriedade";
             console.log(inscricaoEstadual());
             self.inscricaoEstadual.message("");
             if(inscricaoEstadual() == ""){
+                GetPropriedades();
                 return;
             }
-            //cpf(data.cpf)
             GetPropriedade();
         }
 
@@ -158,7 +152,6 @@ const url = "https://localhost:7168/api/propriedade";
             self.municipio(propriedadeSelect.municipio);
             self.estado(propriedadeSelect.estado);
             GetRebanhos();
-            console.log(propriedadeSelect);
         };
 
         self.post = function ()
@@ -169,16 +162,13 @@ const url = "https://localhost:7168/api/propriedade";
             propriedadeAdd.municipio = Municipio().nome;
             propriedadeAdd.estado = Municipio().estado;
             
-            console.log(Municipio().idMunicipio);
-            console.log(ko.toJSON(propriedadeAdd));
             $.ajax({
                 type: "POST",
                 url: url,
                 data: ko.toJSON(propriedadeAdd),
                 contentType: "application/json",
                 success: function (data) {
-                    alert("Registro incluído com sucesso");
-
+                    alert("Propriedade adicionada!");
                 },
                 error: function (error) {
                     console.log(error.responseJSON);
@@ -188,14 +178,13 @@ const url = "https://localhost:7168/api/propriedade";
 
         self.put = function ()
         {            
-            console.log(ko.toJSON(propriedadeAdd));
             $.ajax({
                 type: "PUT",
                 url: url,
                 data: ko.toJSON(propriedadeAdd),
                 contentType: "application/json",
                 success: function (data) {
-                    alert("Registro incluído com sucesso");
+                    alert("Propriedade alterada!");
 
                 },
                 error: function (error) {
@@ -216,10 +205,7 @@ const url = "https://localhost:7168/api/propriedade";
             var urlFormatada = "https://localhost:7168/api/produtor/cpf/" + cpf();
             $.getJSON(urlFormatada, function(data) {
                 Produtor = data;
-                console.log(Produtor);
-            }).fail(function(error) {
-                console.log(error);
-                
+            }).fail(function(error) {                
                 self.cpf.message(error.responseJSON.errors);
             });
         }
@@ -230,9 +216,7 @@ const url = "https://localhost:7168/api/propriedade";
             var urlFormatada = "https://localhost:7168/api/produtor/" + id;
             $.getJSON(urlFormatada, function(data) {
                 cpf(data.cpf);
-                console.log(data.cpf);
             }).fail(function(error) {
-                console.log(error);
                 self.cpf.message(error.responseJSON.errors);
             });
         };
@@ -257,7 +241,6 @@ const url = "https://localhost:7168/api/propriedade";
         {
             $.getJSON("https://localhost:7168/api/rebanho/" + inscricaoEstadual() + "/Propriedade", function(data) {
                 self.rebanhos(data);
-                console.log(data);
             });
         };
     }

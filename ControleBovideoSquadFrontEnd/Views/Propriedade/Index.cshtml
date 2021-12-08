@@ -37,8 +37,8 @@
                         <td data-bind="text: inscricaoEstadual"></td>
                         <td data-bind="text: municipio"></td>
                         <td>
-                            <a data-bs-toggle="modal" href="#detalhesPropriedade" data-bind="click: getPropriedadeDetalhe" class="btn btn-primary ms-1">Detalhes</a>
-                            <a data-bs-toggle="modal" href="#editarPropriedade" data-bind="click: getPropriedadeEditar" class="btn btn-primary ms-1">Editar</a>
+                            <a data-bs-toggle="modal" href="#detalhesPropriedade" data-bind="click: getPropriedadeDetalhe" class="btn btn-outline-primary ms-1">Detalhes</a>
+                            <a data-bs-toggle="modal" href="#editarPropriedade" data-bind="click: getPropriedadeEditar" class="btn btn-outline-warning ms-1">Editar</a>
                         </td>
                     </tr>
                 </tbody>
@@ -228,3 +228,6 @@
         </div>
     </div>
 </div>
+@section Scripts{
+    <script src="~/js/propriedade.js"></script>
+}
