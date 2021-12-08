@@ -112,7 +112,9 @@ var ProdutorViewModel = function () {
     }
 
     self.GetProdutor = function () {
-        console.log(self.findCPF())
+        console.log(self.findCPF().length)
+        if (self.findCPF().length < 11 || !self.findCPF()) return alert("Insira o CPF completo")
+
         $.ajax({
             type: "GET",
             url: `https://localhost:7168/api/Produtor/cpf/${self.findCPF()}`,

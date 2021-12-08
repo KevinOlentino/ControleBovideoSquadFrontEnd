@@ -31,3 +31,7 @@ body {
   opacity: 0;
   transition: .38s ease-in;
 }
+
+.bg-green {
+  background-color: #198754;
+}
