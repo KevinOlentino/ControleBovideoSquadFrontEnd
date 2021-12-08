@@ -37,8 +37,8 @@
                         <td data-bind="text: inscricaoEstadual"></td>
                         <td data-bind="text: municipio"></td>
                         <td>
-                            <a data-bs-toggle="modal" href="#detalhesPropriedade" data-bind="click: getPropriedadeDetalhe" class="btn btn-outline-primary ms-1">Detalhes</a>
-                            <a data-bs-toggle="modal" href="#editarPropriedade" data-bind="click: getPropriedadeEditar" class="btn btn-outline-warning ms-1">Editar</a>
+                            <a data-bs-toggle="modal" href="#detalhesPropriedade" data-bind="click: getPropriedadeDetalhe" class="btn btn-primary ms-1">Detalhes</a>
+                            <a data-bs-toggle="modal" href="#editarPropriedade" data-bind="click: getPropriedadeEditar" class="btn btn-warning ms-1">Editar</a>
                         </td>
                     </tr>
                 </tbody>
@@ -66,7 +66,7 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label">Nome da propriedade: </label>
                                     <input class="form-control me-2" type="search" placeholder="ex. Fazenda" name="nome_propriedade" data-bind="value: nome">
-                                    <div class="text-danger"></div>
+                                    <div class="text-danger" data-bind="text: nome.message"></div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -80,10 +80,9 @@
                                     <select data-bind="options: municipios,
                                         optionsText: 'nome',
                                         value: Municipio,
-                                        optionsValue: 'idMunicipio',
                                         optionsCaption: 'Selecione um Municipio'" name="idMunicipio" id="inputState" class="form-select">
                                     </select>
-                                    <div class="text-danger"></div>
+                                    <div class="text-danger" data-bind="text: idMunicipio.message"></div>
                                 </div>
                             </div>
                         </div>
@@ -92,14 +91,14 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label">Rua: </label>
                                     <input class="form-control" type="text" name="rua" data-bind="value: rua">
-                                    <div class="text-danger"></div>
+                                    <div class="text-danger" data-bind="text: rua.message"></div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
                                     <label class="form-label">Numero: </label>
                                     <input class="form-control" type="number" name="numero" data-bind="value: numero">
-                                    <div class="text-danger"></div>
+                                    <div class="text-danger" data-bind="text: numero.message"></div>
                                 </div>
                             </div>
                         </div>
@@ -132,13 +131,13 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label">Nome da propriedade: </label>
                                     <input class="form-control me-2" type="search" placeholder="ex. Fazenda" name="nome_propriedade" data-bind="value: nome">
-                                    <div class="text-danger"></div>
+                                    <div class="text-danger" data-bind="text: nome.message"></div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label class="form-label">Informe a Inscrição Estadual: </label>
-                                    <input class="form-control me-2" type="search" name="inscricao_estadual" data-bind="value: inscricaoEstadual, hasfocus: inscricaoEstadual.focused" disabled>
+                                    <input class="form-control me-2" type="search" name="inscricao_estadual" data-bind="value: inscricaoEstadual, hasfocus: inscricaoEstadualEditar.focused" disabled>
                                     <div class="text-danger" data-bind="text: inscricaoEstadual.message"></div>
                                 </div>
                                 <div class="form-group mb-3">
@@ -146,9 +145,10 @@
                                     <select data-bind="options: municipios,
                                         optionsText: 'nome',
                                         value: Municipio,
+                                        optionValue: idMunicipio,
                                         optionsCaption: 'Selecione um Municipio'" name="idMunicipio" id="inputState" class="form-select">
                                     </select>
-                                    <div class="text-danger"></div>
+                                    <div class="text-danger" data-bind="text: idMunicipio.message"></div>
                                 </div>
                             </div>
                         </div>
@@ -157,14 +157,14 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label">Rua: </label>
                                     <input class="form-control" type="text" name="rua" data-bind="value: rua">
-                                    <div class="text-danger"></div>
+                                    <div class="text-danger" data-bind="text: rua.message"></div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
                                     <label class="form-label">Numero: </label>
                                     <input class="form-control" type="number" name="numero" data-bind="value: numero">
-                                    <div class="text-danger"></div>
+                                    <div class="text-danger" data-bind="text: numero.message"></div>
                                 </div>
                             </div>
                         </div>

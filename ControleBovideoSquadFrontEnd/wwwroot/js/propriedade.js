@@ -2,14 +2,16 @@ const url = "https://localhost:7168/api/propriedade";
     var ViewPropriedade = function()
     {
         self = this;
+        //Arrays
         self.propriedades = ko.observableArray([]);
         self.rebanhos = ko.observableArray([]);
         self.municipios = ko.observable([]);
 
+        //Valida CPF e IE
         Boolean:validarCpf = true;
         Boolean:validarCpfEditar = true;
         Boolean:validarInscricaoEstadual = true;
-        Boolean:mostrar = true;
+        Boolean:validarInscricaoEstadualEditar = true;
 
         GetPropriedades();
         getMunicipios();
@@ -17,6 +19,7 @@ const url = "https://localhost:7168/api/propriedade";
         var Produtor;
         self.Municipio = ko.observable("");
 
+        //Dados propriedade
         self.idPropriedade = ko.observable("");
         self.inscricaoEstadual = ko.observable("");
         self.nome = ko.observable("");
@@ -29,7 +32,9 @@ const url = "https://localhost:7168/api/propriedade";
         self.municipio = ko.observable("");
         self.estado = ko.observable("");
         self.cpf = ko.observable("");
+
         self.cpfEditar = ko.observable("");
+        self.inscricaoEstadualEditar = ko.observable("");
         
         self.cpf.message = ko.observable("");
         self.inscricaoEstadual.message = ko.observable("");
@@ -41,6 +46,7 @@ const url = "https://localhost:7168/api/propriedade";
         self.cpf.focused = ko.observable("");
         self.cpfEditar.focused = ko.observable("");
         self.inscricaoEstadual.focused = ko.observable("");
+        self.inscricaoEstadualEditar.focused = ko.observable("");
 
         var propriedadeAdd = {
             idPropriedade: self.idPropriedade,
@@ -102,6 +108,24 @@ const url = "https://localhost:7168/api/propriedade";
             }
         });
 
+        self.inscricaoEstadualEditar.focused.subscribe(function(newValue) {  
+            if(validarInscricaoEstadualEditar){
+                validarInscricaoEstadualEditar = false;
+            }else{
+                if(inscricaoEstadual() == ""){
+                    self.inscricaoEstadualEditar.message("");
+                    return;
+                }
+
+                var urlFormatada = "https://localhost:7168/api/Propriedade/validainscricao/" + inscricaoEstadual();
+                $.getJSON(urlFormatada, function(data) {
+                }).fail(function(error) {
+                    self.inscricaoEstadualEditar.message(error.responseText);
+                });
+                
+                validarInscricaoEstadualEditar = true;
+            }
+        });
 
         self.limpaCampo = function(){
             self.idPropriedade("");
@@ -116,7 +140,6 @@ const url = "https://localhost:7168/api/propriedade";
             self.idMunicipio("");
             self.municipio("");
             self.estado("");
-            console.log("teste");
         }
 
         self.getInscricao = function(){
@@ -136,7 +159,6 @@ const url = "https://localhost:7168/api/propriedade";
         self.getPropriedadeEditar = function(data){
             GetProdutorId(data.idProdutor);
             getPropriedadeSelecionado(data);
-
         }
 
         self.getPropriedadeSelecionado = function(propriedadeSelect){
@@ -158,39 +180,86 @@ const url = "https://localhost:7168/api/propriedade";
         {
             propriedadeAdd.idProdutor = Produtor.idProdutor;
             propriedadeAdd.nomeProdutor = Produtor.nome;
+            propriedadeAdd.idPropriedade = 0;
+            propriedadeAdd.idEndereco = 0;
             propriedadeAdd.idMunicipio = Municipio().idMunicipio;
             propriedadeAdd.municipio = Municipio().nome;
             propriedadeAdd.estado = Municipio().estado;
-            
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: ko.toJSON(propriedadeAdd),
-                contentType: "application/json",
-                success: function (data) {
-                    alert("Propriedade adicionada!");
-                },
-                error: function (error) {
-                    console.log(error.responseJSON);
-                }
-          });
+            if(ValidarForm()){
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: ko.toJSON(propriedadeAdd),
+                    contentType: "application/json",
+                    success: function (data) {
+                        $('.modal').modal('hide');
+                        GetPropriedades();
+                    },
+                    error: function (error) {
+                        alert(error.responseJSON)
+                        console.log(error.responseJSON);
+                    }
+              });
+            }
+            GetPropriedades();
         }
 
         self.put = function ()
         {            
-            $.ajax({
-                type: "PUT",
-                url: url,
-                data: ko.toJSON(propriedadeAdd),
-                contentType: "application/json",
-                success: function (data) {
-                    alert("Propriedade alterada!");
+            if(ValidarForm()){
 
-                },
-                error: function (error) {
-                    console.log(error.responseJSON);
-                }
-          });
+                $.ajax({
+                    type: "PUT",
+                    url: url,
+                    data: ko.toJSON(propriedadeAdd),
+                    contentType: "application/json",
+                    success: function (data) {
+                        $('.modal').modal('hide');
+                        GetPropriedades();
+                    },
+                    error: function (error) {
+                        alert(error.responseJSON);
+                    }
+              });
+            }
+        }
+
+        function ValidarForm(){
+            self.nome.message("");
+            self.idMunicipio.message("");
+            self.rua.message("");
+            self.numero.message("");
+            
+            var valida = true
+
+            if(nome() == "" ){
+                self.nome.message("Campo obrigatório!");
+                valida = false
+            }
+            if(cpf() == "" || cpf.message() != ""){
+                self.cpf.message("Campo obrigatório!");
+                valida = false
+            }
+            if(inscricaoEstadual() == ""){
+                self.inscricaoEstadual.message("Campo obrigatório!");
+                valida = false
+            }
+            if(inscricaoEstadual.message() != ""){
+                valida = false
+            }
+            if(idMunicipio() == null){
+                self.idMunicipio.message("Campo obrigatório!");
+                valida = false
+            }
+            if(rua() == ""){
+                self.rua.message("Campo obrigatório!");
+                valida = false
+            }
+            if(numero() == ""){
+                self.numero.message("Campo obrigatório!");
+                valida = false
+            }
+            return valida;
         }
 
         function getMunicipios()
