@@ -123,9 +123,10 @@ var ProdutorViewModel = function () {
                 self.getprodutorselecionado(data);
                 getPropriedades(data.idProdutor)
                 getRebanhos(data.cpf)
+                $("#showDetails").modal('show')
             },
             error: function (error) {
-                alert("Erro");
+                alert("Produtor não encontrado!");
                 console.log(error);
             }
         })
