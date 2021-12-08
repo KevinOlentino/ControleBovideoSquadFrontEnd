@@ -63,7 +63,7 @@
                 <div class="modal-header">
                     <button class="btn btn-close" data-bs-dismiss="modal" ></button>
                 </div>
-                <form class="row p-3 needs-validation" id="formProdutor" method="POST" data-bind="submit: Save">
+                <form class="row p-3 needs-validation mb-3" id="formProdutor" method="POST" data-bind="submit: Save">
                     <div class="col-md-6">
                         <label for="inputQuantidade" class="form-label">Quantidade</label>
                         <input type="text" name="quantidade" class="form-control" data-bind="value: quantidade" id="inputQuantidadeAdd" required>
@@ -72,7 +72,7 @@
                         <label for="inputDataDaVacina" class="form-label">Data Da Vacina</label>
                         <input type="date" name="dataDaVacina" class="form-control" data-bind="value: dataDaVacina" id="inputDataDaVacinaAdd" required>
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-6">
                         <label for="inputRebanho" class="form-label">Especie</label>                        
                         <select data-bind="options: rebanho,
                        optionsText: 'especie',
@@ -81,7 +81,7 @@
                        optionsCaption: 'Selecione uma Especie'" name="idRebanho" id="inputRebanho" class="form-select" required>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="inputVacina" class="form-label">Vacina</label>
                         <select data-bind="options: vacinas,
                        optionsText: 'doenca',
@@ -90,7 +90,7 @@
                        optionsCaption: 'Selecione uma Vacina'" name="idVacina" id="inputVacina" class="form-select" required>
                         </select>                        
                     </div>                     
-                    <div class="modal-footer">
+                    <div class="modal-footer mt-3">
                         <button type="submit" class="btn btn-success">Cadastrar</button>
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                     </div>
