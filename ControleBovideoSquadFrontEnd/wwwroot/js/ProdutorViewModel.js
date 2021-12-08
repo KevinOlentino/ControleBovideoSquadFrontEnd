@@ -96,9 +96,9 @@ var ProdutorViewModel = function () {
         idEndereco: self.idEndereco,
         rua: self.rua,
         numero: self.numero,
-        municipio: "",
+        municipio: self.municipio,
         idMunicipio: self.idMunicipio,
-        estado: ""
+        estado: self.estado
     }
 
     function GetProdutores() {
@@ -180,6 +180,7 @@ var ProdutorViewModel = function () {
             }
         });
     }
+    
     self.update = function () {
         var url = "https://localhost:7168/api/Produtor/" + self.idProdutor();
         $.ajax({
@@ -187,18 +188,21 @@ var ProdutorViewModel = function () {
             url: url,
             data: ko.toJSON(produtorDados),
             contentType: "application/json",
-            sucess: function (data) {
+            success: function () {                
+                GetProdutores();                               
+                var data = ko.toJS(produtorDados);
+                data.municipio = (self.municipios()[produtorDados.idMunicipio()-1].nome);            
+                getprodutorselecionado(data)                
+                $('#editarProdutor').modal('hide')
                 alert("Registro atualizado com sucesso!");
-                GetProdutores();
             },
             error: function (error) {
                 alert("Falhou");
             }
-        })
-        console.log(ko.toJSON(produtorDados));
+        })       
     }
 
-    self.getprodutorselecionado = function (_produtor) {
+    self.getprodutorselecionado = function (_produtor) {        
         self.idProdutor(_produtor.idProdutor);
         self.nome(_produtor.nome);
         self.cpf(_produtor.cpf);
