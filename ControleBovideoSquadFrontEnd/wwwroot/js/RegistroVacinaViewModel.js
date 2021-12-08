@@ -1,3 +1,11 @@
+$(document).bind("ajaxRun", function(){
+    $(".loader-wrapper").fadeIn("fast");
+    console.log("teste")
+}).bind("ajaxComplete", function(){
+    $(".loader-wrapper").fadeOut("fast");
+    console.log("teste")
+})
+
 var RegistroVacinaViewModel = function () {
     var self = this;
 
@@ -6,6 +14,9 @@ var RegistroVacinaViewModel = function () {
     self.propriedades = ko.observableArray([]);
     self.rebanho = ko.observableArray([]);
     self.vacinas = ko.observableArray([]);
+
+    GetProdutores();
+    GetVacinas();
 
     self.selectedProdutor = ko.observable();
     self.selectedPropriedade = ko.observable();
@@ -17,9 +28,6 @@ var RegistroVacinaViewModel = function () {
     self.idRebanho = ko.observable();
     self.quantidade = ko.observable();
     self.dataDaVacina = ko.observable();
-
-    GetProdutores();
-    GetVacinas();
 
     var registrovacina = {
         idVacina: self.idVacina,

@@ -9,6 +9,14 @@
     if (v.length == 11) i.value += "-";
 }
 
+$(document).bind("ajaxStart", function(){
+    $(".loader-wrapper").fadeIn("fast");
+})
+$(document).bind("ajaxComplete", function(){
+    $(".loader-wrapper").fadeOut("fast");
+})
+
+
 var ProdutorViewModel = function () {
     var self = this;
 
