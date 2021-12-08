@@ -15,8 +15,8 @@
         </button>
         <div class="d-flex col-md-4 mt-2">
             <input class="form-control me-2" type="search" placeholder="Pesquisar por CPF"
-                aria-label="Search" data-bind="value: findCPF" maxlength="11" >
-            <button href="#showDetails" class="btn btn-outline-success ms-1" data-bs-toggle="modal"
+                aria-label="Search" data-bind="value: findCPF">
+            <button class="btn btn-outline-success ms-1" data-bs-toggle="modal"
                          data-bind="click: GetProdutor">Procurar</button>
         </div>
     </div>
@@ -128,8 +128,7 @@
                                     <th scope="col">Nome</th>
                                     <th scope="col">Rua</th>
                                     <th scope="col">Numero</th>
-                                    <th scope="col">Inscrição Estadual</th>
-                                    <th scope="col">Detalhes</th>
+                                    <th scope="col">Inscrição Estadual</th>                                    
                                 </tr>
                             </thead>
                             <tbody data-bind="foreach: propriedades">
@@ -137,8 +136,7 @@
                                     <td data-bind="text: nome"></td>
                                     <td data-bind="text: rua"></td>
                                     <td data-bind="text: numero"></td>
-                                    <td data-bind="text: inscricaoEstadual"></td>
-                                    <td><button class="btn btn-primary">Detalhes</button></td>
+                                    <td data-bind="text: inscricaoEstadual"></td>                                    
                                 </tr>
                             </tbody>
                         </table>
@@ -245,6 +243,7 @@
         </div>
     </div>
 </div>
+<div class="loader-wrapper" tabindex="-1"><span class="loader"><span class="loader-inner"></span></span></div>
 @section scripts{
     <script src='../js/ProdutorViewModel.js'></script>
 }

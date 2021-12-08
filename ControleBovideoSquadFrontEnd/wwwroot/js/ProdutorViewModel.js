@@ -9,6 +9,14 @@
     if (v.length == 11) i.value += "-";
 }
 
+$(document).bind("ajaxStart", function(){
+    $(".loader-wrapper").fadeIn("fast");
+})
+$(document).bind("ajaxComplete", function(){
+    $(".loader-wrapper").fadeOut("fast");
+})
+
+
 var ProdutorViewModel = function () {
     var self = this;
 
@@ -112,7 +120,9 @@ var ProdutorViewModel = function () {
     }
 
     self.GetProdutor = function () {
-        console.log(self.findCPF())
+        console.log(self.findCPF().length)
+        if (self.findCPF().length < 11 || !self.findCPF()) return alert("Insira o CPF completo")
+
         $.ajax({
             type: "GET",
             url: `https://localhost:7168/api/Produtor/cpf/${self.findCPF()}`,
@@ -123,9 +133,10 @@ var ProdutorViewModel = function () {
                 self.getprodutorselecionado(data);
                 getPropriedades(data.idProdutor)
                 getRebanhos(data.cpf)
+                $("#showDetails").modal('show')
             },
             error: function (error) {
-                alert("Erro");
+                alert("Produtor não encontrado!");
                 console.log(error);
             }
         })
