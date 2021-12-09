@@ -309,8 +309,13 @@ const url = "https://localhost:7168/api/propriedade";
 
         function GetRebanhos()
         {
-            $.getJSON("https://localhost:7168/api/rebanho/" + inscricaoEstadual() + "/Propriedade", function(data) {
+            $.getJSON("https://localhost:7168/api/rebanho/Propriedade/" + inscricaoEstadual(), function(data) {
                 self.rebanhos(data);
+                if(rebanhos().length > 0){
+                    $('#rebanho').show();
+                }else{
+                    $('#rebanho').hide();
+                }
             });
         };
 
@@ -319,8 +324,13 @@ const url = "https://localhost:7168/api/propriedade";
             $.getJSON("https://localhost:7168/api/registrovacina/" + inscricaoEstadual(), function(data) {
                 data.forEach(function (value) {
                     value.dataDaVacina = formatarData(value.dataDaVacina);
-                })    
+                });
             self.registrosVacinas(data);
+            if(registrosVacinas().length > 0){
+                $('#registroVacina').show();
+            }else{
+                $('#registroVacina').hide();
+            }
             });
         };
 

@@ -186,24 +186,17 @@
                     <h5 class="modal-title">Detalhes</h5>
                     <button class="btn btn-close" data-bs-dismiss="modal" #buttonClose></button>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group mb-3">
-                        <label class="form-label" id="txtPropriedadeNome"><strong> Proprietário: </strong><span data-bind="text: nomeProdutor"></span> </label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label"><strong>Nome da propriedade: </strong> <span data-bind="text: nome"></span></label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label"><strong>Inscricao estadual: </strong> <span data-bind="text: inscricaoEstadual"></span></label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label"><strong>Município: </strong> <span data-bind="text: municipio"></span> - <span data-bind="text: estado"></span> </label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label"><strong>Rua: </strong> <span data-bind="text: rua"></span>, <span data-bind="text: numero"></span> </label>
-                    </div>
-                    <div class="">
-                        <h1 class="display-6 text-center">Rebanhos</h1>
+                <div class="modal-body text-center py-5 my-5">
+                    <h1 class="display-5" data-bind="text: nome"></h1>
+                    <p class="lead mb-2" data-bind="text: nomeProdutor"></p>
+                    <p class="lead mb-2">
+                        Endereco: <span data-bind="text: rua"></span>,<span data-bind="text: numero"></span>
+                    </p>
+                    <p class="lead mb-2">IE: <span data-bind="text: inscricaoEstadual"></span></p>
+                    <p class="lead mb-2"><span data-bind="text: municipio"></span> - <span data-bind="text: estado"></span></span></p>
+                    <p class="lead mb-2"><span data-bind="text: rua"></span>, <span data-bind="text: numero"></span></span></p>
+                    <div class="py-5 my-5" id="rebanho">
+                        <h1 class="display-6 text-center mt-3">Rebanhos</h1>
                         <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
@@ -223,7 +216,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="">
+                    <div class="" id="registroVacina">
                         <h1 class="display-6 text-center">Registros de vacinas</h1>
                         <table class="table table-striped table-hover">
                             <thead>
