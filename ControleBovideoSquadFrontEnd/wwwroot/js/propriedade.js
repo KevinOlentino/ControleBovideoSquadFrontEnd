@@ -6,6 +6,7 @@ const url = "https://localhost:7168/api/propriedade";
         self.propriedades = ko.observableArray([]);
         self.rebanhos = ko.observableArray([]);
         self.municipios = ko.observable([]);
+        self.registrosVacinas = ko.observable([]);
 
         //Valida CPF e IE
         Boolean:validarCpf = true;
@@ -35,6 +36,7 @@ const url = "https://localhost:7168/api/propriedade";
 
         self.cpfEditar = ko.observable("");
         self.inscricaoEstadualEditar = ko.observable("");
+        self.inscricaoEstadualPesquisa = ko.observable("");
         
         self.cpf.message = ko.observable("");
         self.inscricaoEstadual.message = ko.observable("");
@@ -143,9 +145,8 @@ const url = "https://localhost:7168/api/propriedade";
         }
 
         self.getInscricao = function(){
-            console.log(inscricaoEstadual());
-            self.inscricaoEstadual.message("");
-            if(inscricaoEstadual() == ""){
+            console.log(inscricaoEstadualPesquisa());
+            if(inscricaoEstadualPesquisa() == ""){
                 GetPropriedades();
                 return;
             }
@@ -154,6 +155,7 @@ const url = "https://localhost:7168/api/propriedade";
 
         self.getPropriedadeDetalhe = function(data){
             getPropriedadeSelecionado(data);
+            GetRegistroVacinas();
         }
 
         self.getPropriedadeEditar = function(data){
@@ -279,7 +281,6 @@ const url = "https://localhost:7168/api/propriedade";
             });
         }
             
-
         function GetProdutorId(id)
         {
             var urlFormatada = "https://localhost:7168/api/produtor/" + id;
@@ -292,7 +293,7 @@ const url = "https://localhost:7168/api/propriedade";
 
         function GetPropriedade()
         {
-            $.getJSON(url + "/inscricao/" + inscricaoEstadual(), function(data) {
+            $.getJSON(url + "/inscricao/" + inscricaoEstadualPesquisa(), function(data) {
                 self.propriedades(data);
             }).fail(function(error){
                 alert(error.responseJSON.errors);
@@ -310,6 +311,13 @@ const url = "https://localhost:7168/api/propriedade";
         {
             $.getJSON("https://localhost:7168/api/rebanho/" + inscricaoEstadual() + "/Propriedade", function(data) {
                 self.rebanhos(data);
+            });
+        };
+
+        function GetRegistroVacinas()
+        {
+            $.getJSON("https://localhost:7168/api/registrovacina/" + inscricaoEstadual(), function(data) {
+                self.registrosVacinas(data);
             });
         };
     }
