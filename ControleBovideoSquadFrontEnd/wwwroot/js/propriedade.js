@@ -317,8 +317,21 @@ const url = "https://localhost:7168/api/propriedade";
         function GetRegistroVacinas()
         {
             $.getJSON("https://localhost:7168/api/registrovacina/" + inscricaoEstadual(), function(data) {
-                self.registrosVacinas(data);
+                data.forEach(function (value) {
+                    value.dataDaVacina = formatarData(value.dataDaVacina);
+                })    
+            self.registrosVacinas(data);
             });
         };
+
+        function formatarData(data){
+            var date = new Date(data),
+            dia  = date.getDate().toString(),
+            diaF = (dia.length == 1) ? '0'+dia : dia,
+            mes  = (date.getMonth()+1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+            mesF = (mes.length == 1) ? '0'+mes : mes,
+            anoF = date.getFullYear();
+            return diaF+"/"+mesF+"/"+anoF;
+        }
     }
     ko.applyBindings(ViewPropriedade());
