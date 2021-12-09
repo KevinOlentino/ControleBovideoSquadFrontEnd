@@ -169,7 +169,7 @@ var RegistroVacinaViewModel = function () {
         console.log(produtorID)
         $.ajax({
             type: "GET",
-            url: `https://localhost:7168/api/Propriedade/${produtorID}/Produtor`,
+            url: `https://localhost:7168/api/Propriedade/Produtor/${produtorID}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
@@ -184,7 +184,7 @@ var RegistroVacinaViewModel = function () {
     self.GetRebanho = function (propriedadeInscricao) {
         $.ajax({
             type: "GET",
-            url: `https://localhost:7168/api/Rebanho/${propriedadeInscricao}/Propriedade`,
+            url: `https://localhost:7168/api/Rebanho/Propriedade/${propriedadeInscricao}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {

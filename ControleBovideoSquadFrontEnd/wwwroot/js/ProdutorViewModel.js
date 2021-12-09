@@ -62,7 +62,7 @@ var ProdutorViewModel = function () {
     function getRebanhos(value) {
         $.ajax({
             type: "GET",
-            url: `https://localhost:7168/api/Rebanho/${value}/Produtor`,
+            url: `https://localhost:7168/api/Rebanho/Produtor/${value}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
@@ -77,7 +77,7 @@ var ProdutorViewModel = function () {
     function getPropriedades(value) {
         $.ajax({
             type: "GET",
-            url: `https://localhost:7168/api/Propriedade/${value}/Produtor`,
+            url: `https://localhost:7168/api/Propriedade/Produtor/${value}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
