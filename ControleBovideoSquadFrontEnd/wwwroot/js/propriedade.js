@@ -98,14 +98,7 @@ const url = "https://localhost:7168/api/propriedade";
                     self.inscricaoEstadual.message("");
                     return;
                 }
-                self.inscricaoEstadual.message("teste");
-
-                var urlFormatada = "https://localhost:7168/api/Propriedade/validainscricao/" + inscricaoEstadual();
-                $.getJSON(urlFormatada, function(data) {
-                }).fail(function(error) {
-                    self.inscricaoEstadual.message(error.responseText);
-                });
-                
+                GetInscricao();
                 validarInscricaoEstadual = true;
             }
         });
@@ -118,13 +111,7 @@ const url = "https://localhost:7168/api/propriedade";
                     self.inscricaoEstadualEditar.message("");
                     return;
                 }
-
-                var urlFormatada = "https://localhost:7168/api/Propriedade/validainscricao/" + inscricaoEstadual();
-                $.getJSON(urlFormatada, function(data) {
-                }).fail(function(error) {
-                    self.inscricaoEstadualEditar.message(error.responseText);
-                });
-                
+                GetInscricao();
                 validarInscricaoEstadualEditar = true;
             }
         });
@@ -187,6 +174,7 @@ const url = "https://localhost:7168/api/propriedade";
             propriedadeAdd.idMunicipio = Municipio().idMunicipio;
             propriedadeAdd.municipio = Municipio().nome;
             propriedadeAdd.estado = Municipio().estado;
+
             if(ValidarForm()){
                 $.ajax({
                     type: "POST",
@@ -198,18 +186,15 @@ const url = "https://localhost:7168/api/propriedade";
                         GetPropriedades();
                     },
                     error: function (error) {
-                        alert(error.responseJSON)
-                        console.log(error.responseJSON);
+                        alert(error.responseJSON);
                     }
               });
             }
-            GetPropriedades();
         }
 
         self.put = function ()
         {            
             if(ValidarForm()){
-
                 $.ajax({
                     type: "PUT",
                     url: url,
@@ -261,6 +246,10 @@ const url = "https://localhost:7168/api/propriedade";
                 self.numero.message("Campo obrigatório!");
                 valida = false
             }
+            if(parseInt(numero(), 10) < 1){
+                self.numero.message("Numero deve ser maior que um!");
+                valida = false
+            }
             return valida;
         }
 
@@ -277,7 +266,15 @@ const url = "https://localhost:7168/api/propriedade";
             $.getJSON(urlFormatada, function(data) {
                 Produtor = data;
             }).fail(function(error) {                
-                self.cpf.message(error.responseJSON.errors);
+                self.cpf.message(error.responseJSON);
+            });
+        }
+
+        function GetInscricao(){
+            var urlFormatada = "https://localhost:7168/api/Propriedade/validainscricao/" + inscricaoEstadual();
+                $.getJSON(urlFormatada, function(data) {
+                }).fail(function(error) {
+                    self.inscricaoEstadualEditar.message(error.responseText);
             });
         }
             
@@ -287,7 +284,7 @@ const url = "https://localhost:7168/api/propriedade";
             $.getJSON(urlFormatada, function(data) {
                 cpf(data.cpf);
             }).fail(function(error) {
-                self.cpf.message(error.responseJSON.errors);
+                self.cpf.message(error.responseJSON);
             });
         };
 
@@ -296,7 +293,7 @@ const url = "https://localhost:7168/api/propriedade";
             $.getJSON(url + "/inscricao/" + inscricaoEstadualPesquisa(), function(data) {
                 self.propriedades(data);
             }).fail(function(error){
-                alert(error.responseJSON.errors);
+                alert(error.responseJSON);
             });
         } 
 
