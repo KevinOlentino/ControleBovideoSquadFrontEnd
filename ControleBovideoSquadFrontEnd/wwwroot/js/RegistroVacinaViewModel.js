@@ -1,34 +1,3 @@
-$(document).bind("ajaxRun", function(){
-    $(".loader-wrapper").fadeIn("fast");    
-}).bind("ajaxComplete", function(){
-    $(".loader-wrapper").fadeOut("fast");  
-})
-
-function MostrarToast(msg){    
-    var msgError = document.getElementById('errorToastMsg')
-    msgError.innerHTML = msg;          
-    $("#errorToast").toast('show');
-}
-
-function MostrarErro(msg){
-    $("#errorToast").removeClass('bg-success')
-    $("#errorToast").addClass('bg-danger')
-    MostrarToast(msg); 
-}
-
-function MostrarSucesso(msg){
-    $("#errorToast").addClass('bg-success')
-    $("#errorToast").removeClass('bg-danger')
-    MostrarToast(msg);   
-}
-
-function MostrarMensagem(msg){
-    const toast = document.getElementById("toast")
-    toast.innerHTML = msg
-    toast.style.opacity = 1
-    setTimeout(() => toast.style.opacity = 0, 2000)
-}
-
 var RegistroVacinaViewModel = function () {
     var self = this;
 
