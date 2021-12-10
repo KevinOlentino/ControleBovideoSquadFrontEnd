@@ -10,40 +10,6 @@
     if (v.length == 11) i.value += "-";
 }
 
-$(document).bind("ajaxStart", function(){
-    $(".loader-wrapper").fadeIn("fast");
-    console.log("teste")
-})
-$(document).bind("ajaxComplete", function(){
-    $(".loader-wrapper").fadeOut("fast");
-    console.log("teste")
-})
-
-function MostrarToast(msg){    
-    var msgError = document.getElementById('errorToastMsg')
-    msgError.innerHTML = msg;          
-    $("#errorToast").toast('show');
-}
-
-function MostrarErro(msg){
-    $("#errorToast").removeClass('bg-success')
-    $("#errorToast").addClass('bg-danger')
-    MostrarToast(msg); 
-}
-
-function MostrarSucesso(msg){
-    $("#errorToast").addClass('bg-success')
-    $("#errorToast").removeClass('bg-danger')
-    MostrarToast(msg);   
-}
-
-function MostrarMensagem(msg){
-    const toast = document.getElementById("toast")
-    toast.innerHTML = msg
-    toast.style.opacity = 1
-    setTimeout(() => toast.style.opacity = 0, 2000)
-}
-
 var ProdutorViewModel = function () {
     var self = this;
 

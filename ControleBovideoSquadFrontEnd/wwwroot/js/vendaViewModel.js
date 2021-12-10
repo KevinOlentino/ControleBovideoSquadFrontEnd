@@ -8,13 +8,6 @@ function formatarData(data){
     return diaF+"/"+mesF+"/"+anoF;
 }
 
-function mostrarNotificacao(msg, erro = false) {
-    const toast = document.getElementById('toast')
-    toast.innerHTML = msg
-    toast.style.opacity = 1
-    setTimeout(() => toast.style.opacity = 0, 2000)
-}
-
 function appViewModel() {
     const self = this
     const apiUrl = 'https://localhost:7168/api/venda'
@@ -72,11 +65,12 @@ function appViewModel() {
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: console.log,
-            error: error => mostrarNotificacao(error.responseJSON[0])
+            error: error => MostrarMensagem(error.responseJSON[0])
         }).then(() => {
             $.get(apiUrl, self.vendas)
             $('#adicionarVenda').modal('hide')
-        }).catch(alert)
+            MostrarSucesso("Venda adicionada!")
+        }).catch(console.log)
     }
 
     self.cancelarVenda = (venda) => {
@@ -87,8 +81,8 @@ function appViewModel() {
             error: console.log
         }).then(() => {
             $.get(apiUrl, self.vendas)
-            alert('Registro de venda cancelado')
-        }).catch(alert)
+            MostrarSucesso("Registro de venda cancelado!")
+        }).catch(MostrarErro)
     }
 }
 
