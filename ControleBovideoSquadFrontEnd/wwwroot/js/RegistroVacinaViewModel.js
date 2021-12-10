@@ -1,9 +1,7 @@
 $(document).bind("ajaxRun", function(){
-    $(".loader-wrapper").fadeIn("fast");
-    console.log("teste")
+    $(".loader-wrapper").fadeIn("fast");    
 }).bind("ajaxComplete", function(){
-    $(".loader-wrapper").fadeOut("fast");
-    console.log("teste")
+    $(".loader-wrapper").fadeOut("fast");  
 })
 
 var RegistroVacinaViewModel = function () {
@@ -56,7 +54,6 @@ var RegistroVacinaViewModel = function () {
             document.getElementById("buttonAdicionar").disabled = true;
         }
 
-        console.log(value);
     })
 
     self.getRegistroSelecionado = function (_registro) {
@@ -91,11 +88,8 @@ var RegistroVacinaViewModel = function () {
                 })
 
                 self.registrovacinas(data);
-                console.log(self.registrovacinas())
             },
-            error: function (error) {
-                alert("Erro");
-            }
+            error: error => alert(error.responseJSON)            
         })
     }
 
@@ -108,10 +102,7 @@ var RegistroVacinaViewModel = function () {
                 console.log(self.selectedPropriedade())
                 GetRegistroVacina(self.selectedPropriedade());
             },
-            error: function (error) {
-                console.log(error)
-                alert("Erro");
-            }
+            error: error => alert(error.responseJSON)
         })
     }
 
@@ -125,9 +116,7 @@ var RegistroVacinaViewModel = function () {
                 self.produtores(data);
                 console.log(self.produtores())
             },
-            error: function (error) {
-                alert("Erro");
-            }
+            error: () =>  alert("Alguma coisa deu errado, contate o admnistrador!")
         });
     }
 
@@ -137,13 +126,8 @@ var RegistroVacinaViewModel = function () {
             url: "https://localhost:7168/api/Vacina",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (data) {
-                self.vacinas(data);
-                console.log(self.vacinas());
-            },
-            error: function (error) {
-                alert("Erro");
-            }
+            success: self.vacinas,
+            error: () => alert("Alguma coisa deu errado, contate o admnistrador!")
         })
     }
     self.Save = () => {
@@ -158,11 +142,8 @@ var RegistroVacinaViewModel = function () {
                 GetRegistroVacina(self.selectedPropriedade());
                 $('#adicionarRegistroVacina').modal('hide')
             },
-            error: function (error) {
-                alert(error.responseJSON);
-            }
-        })
-        console.log(ko.toJSON(registrovacina));
+            error: error => alert(error.responseJSON)            
+        })        
     }
 
     self.GetPropriedades = function (produtorID) {
@@ -175,9 +156,7 @@ var RegistroVacinaViewModel = function () {
             success: function (data) {
                 self.propriedades(data);
             },
-            error: function (error) {
-                alert("Erro");
-            }
+            error: error => alert(error.responseJSON)            
         })
     }
 
@@ -194,9 +173,7 @@ var RegistroVacinaViewModel = function () {
                     console.log(value.especie.nome)
                 }));
             },
-            error: function (error) {
-                alert("Erro");
-            }
+            error: error => alert(error.responseJSON)
         })
     }
 

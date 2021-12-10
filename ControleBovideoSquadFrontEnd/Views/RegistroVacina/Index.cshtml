@@ -66,7 +66,7 @@
                 <form class="row p-3 needs-validation mb-3" id="formProdutor" method="POST" data-bind="submit: Save">
                     <div class="col-md-6">
                         <label for="inputQuantidade" class="form-label">Quantidade</label>
-                        <input type="text" name="quantidade" class="form-control" data-bind="value: quantidade" id="inputQuantidadeAdd" required>
+                        <input type="number" name="quantidade" class="form-control" min="1" data-bind="value: quantidade" id="inputQuantidadeAdd" required>
                     </div>
                     <div class="col-md-6">
                         <label for="inputDataDaVacina" class="form-label">Data Da Vacina</label>

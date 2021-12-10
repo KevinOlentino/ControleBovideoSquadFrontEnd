@@ -1,5 +1,6 @@
 ﻿function mascara(i) {
     var v = i.value;
+
     if (isNaN(v[v.length - 1])) {
         i.value = v.substring(0, v.length - 1);
         return;
@@ -11,9 +12,11 @@
 
 $(document).bind("ajaxStart", function(){
     $(".loader-wrapper").fadeIn("fast");
+    console.log("teste")
 })
 $(document).bind("ajaxComplete", function(){
     $(".loader-wrapper").fadeOut("fast");
+    console.log("teste")
 })
 
 
@@ -52,8 +55,7 @@ var ProdutorViewModel = function () {
         self.idMunicipio("");
     }
 
-    self.DetalharProdutor = function (value) {
-        console.log(value)
+    self.DetalharProdutor = function (value) {        
         getRebanhos(value.cpf);
         getPropriedades(value.idProdutor)
         self.getVendasDoProdutor(value.cpf)
@@ -65,12 +67,8 @@ var ProdutorViewModel = function () {
             url: `https://localhost:7168/api/Rebanho/Produtor/${value}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (data) {
-                self.rebanhos(data);
-            },
-            error: function (error) {
-                console.log(error);
-            }
+            success: self.rebanhos,
+            error: error => console.log(error.responseJSON)
         });
     }
 
@@ -80,12 +78,8 @@ var ProdutorViewModel = function () {
             url: `https://localhost:7168/api/Propriedade/Produtor/${value}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (data) {
-                self.propriedades(data);
-            },
-            error: function (error) {
-                self.propriedades("");
-            }
+            success: self.propriedades,            
+            error: () => self.propriedades("")            
         });
     }
 
@@ -113,14 +107,11 @@ var ProdutorViewModel = function () {
                 })
                 self.produtores(data);
             },
-            error: function (error) {
-                alert("Erro");
-            }
+            error: error => alert(error.responseJSON)
         });
     }
 
-    self.GetProdutor = function () {
-        console.log(self.findCPF().length)
+    self.GetProdutor = function () {        
         if (self.findCPF().length < 11 || !self.findCPF()) return alert("Insira o CPF completo")
 
         $.ajax({
@@ -135,10 +126,7 @@ var ProdutorViewModel = function () {
                 getRebanhos(data.cpf)
                 $("#showDetails").modal('show')
             },
-            error: function (error) {
-                alert("Produtor não encontrado!");
-                console.log(error);
-            }
+            error: () => alert("Produtor não encontrado!")                         
         })
     }
 
@@ -157,9 +145,7 @@ var ProdutorViewModel = function () {
                 GetProdutores();
                 $('#adicionarProdutor').modal('hide')
             },
-            error: function (error) {
-                alert(error.responseJSON);
-            }
+            error: error => alert(error.responseJSON)            
         })
         console.log(ko.toJSON(produtorDados));
     }
@@ -175,9 +161,7 @@ var ProdutorViewModel = function () {
                 self.municipioEdit(data);
                 console.log(municipioEdit());
             },
-            error: function (error) {
-                alert("Erro");
-            }
+            error: () => alert("Algo deu errado, contate o admnistrador!")
         });
     }
     
@@ -196,9 +180,7 @@ var ProdutorViewModel = function () {
                 $('#editarProdutor').modal('hide')
                 alert("Registro atualizado com sucesso!");
             },
-            error: function (error) {
-                alert("Falhou");
-            }
+            error: error => alert(error.responseJSON)            
         })       
     }
 
