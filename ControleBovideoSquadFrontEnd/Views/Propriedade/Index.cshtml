@@ -61,19 +61,18 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label">Informe o CPF do produtor: </label>
                                     <input class="form-control me-2" type="text" placeholder="000.000.000-00" name="cpf" data-bind="value: cpf, hasfocus: cpf.focused">
-                                    <div class="text-danger" data-bind="text: cpf.message"></div>
+                                    <div class="validationMessage" data-bind="text: cpf.message"></div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label">Nome da propriedade: </label>
                                     <input class="form-control me-2" type="search" placeholder="ex. Fazenda" name="nome_propriedade" data-bind="value: nome">
-                                    <div class="text-danger" data-bind="text: nome.message"></div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label class="form-label">Informe a Inscrição Estadual: </label>
                                     <input class="form-control me-2" type="search" placeholder="000.000.000" name="inscricao_estadual" data-bind="value: inscricaoEstadual, hasfocus: inscricaoEstadual.focused">
-                                    <div class="text-danger" data-bind="text: inscricaoEstadual.message"></div>
+                                    <div class="validationMessage" data-bind="text: inscricaoEstadual.message"></div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label">Selecione o município: </label>
@@ -82,7 +81,6 @@
                                         value: Municipio,
                                         optionsCaption: 'Selecione um Municipio'" name="idMunicipio" id="inputState" class="form-select">
                                     </select>
-                                    <div class="text-danger" data-bind="text: idMunicipio.message"></div>
                                 </div>
                             </div>
                         </div>
@@ -91,14 +89,12 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label">Rua: </label>
                                     <input class="form-control" type="text" name="rua" data-bind="value: rua">
-                                    <div class="text-danger" data-bind="text: rua.message"></div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
                                     <label class="form-label">Numero: </label>
                                     <input class="form-control" type="number" name="numero" data-bind="value: numero">
-                                    <div class="text-danger" data-bind="text: numero.message"></div>
                                 </div>
                             </div>
                         </div>
@@ -126,19 +122,17 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label">Informe o CPF do produtor: </label>
                                     <input class="form-control me-2" type="text" placeholder="000.000.000-00" name="cpf" data-bind="value: cpf, hasfocus: cpfEditar.focused">
-                                    <div class="text-danger" data-bind="text: cpf.message"></div>
+                                    <div class="validationMessage" data-bind="text: cpfEditar.message"></div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label">Nome da propriedade: </label>
                                     <input class="form-control me-2" type="search" placeholder="ex. Fazenda" name="nome_propriedade" data-bind="value: nome">
-                                    <div class="text-danger" data-bind="text: nome.message"></div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label class="form-label">Informe a Inscrição Estadual: </label>
                                     <input class="form-control me-2" type="search" name="inscricao_estadual" data-bind="value: inscricaoEstadual, hasfocus: inscricaoEstadualEditar.focused" disabled>
-                                    <div class="text-danger" data-bind="text: inscricaoEstadual.message"></div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label">Selecione o município: </label>
@@ -148,7 +142,6 @@
                                         optionValue: idMunicipio,
                                         optionsCaption: 'Selecione um Municipio'" name="idMunicipio" id="inputState" class="form-select">
                                     </select>
-                                    <div class="text-danger" data-bind="text: idMunicipio.message"></div>
                                 </div>
                             </div>
                         </div>
@@ -157,14 +150,12 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label">Rua: </label>
                                     <input class="form-control" type="text" name="rua" data-bind="value: rua">
-                                    <div class="text-danger" data-bind="text: rua.message"></div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
                                     <label class="form-label">Numero: </label>
                                     <input class="form-control" type="number" name="numero" data-bind="value: numero">
-                                    <div class="text-danger" data-bind="text: numero.message"></div>
                                 </div>
                             </div>
                         </div>
@@ -244,5 +235,4 @@
 </div>
 @section Scripts{
     <script src="~/js/propriedade.js"></script>
-    <script src="~/js/teste.js"></script>
 }
