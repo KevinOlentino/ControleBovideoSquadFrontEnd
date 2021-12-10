@@ -207,4 +207,5 @@ var ProdutorViewModel = function () {
         })
     }
 }
+
 ko.applyBindings(ProdutorViewModel());
