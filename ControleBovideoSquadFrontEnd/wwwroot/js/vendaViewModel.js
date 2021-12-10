@@ -38,6 +38,7 @@ function appViewModel() {
 
     self.vendas = ko.observableArray()
     self.propriedades = ko.observableArray()
+    self.propriedadesSemAOrigem = ko.observableArray()
     self.finalidadesDeVenda = ko.observableArray()
     self.especies = ko.observableArray()
 
@@ -45,6 +46,11 @@ function appViewModel() {
     $.get('https://localhost:7168/api/propriedade', self.propriedades)
     $.get('https://localhost:7168/api/finalidadedevenda', self.finalidadesDeVenda)
     $.get('https://localhost:7168/api/especie', self.especies)
+
+    self.origemSelecionada.subscribe(origem => {
+        const arrayFiltrado = Array.from(self.propriedades()).filter(propriedade => propriedade.idPropriedade != origem)
+        self.propriedadesSemAOrigem(arrayFiltrado)
+    })
 
     self.salvarVenda = () => {
         let errors = ko.validation.group(this)
