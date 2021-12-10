@@ -4,6 +4,31 @@ $(document).bind("ajaxRun", function(){
     $(".loader-wrapper").fadeOut("fast");  
 })
 
+function MostrarToast(msg){    
+    var msgError = document.getElementById('errorToastMsg')
+    msgError.innerHTML = msg;          
+    $("#errorToast").toast('show');
+}
+
+function MostrarErro(msg){
+    $("#errorToast").removeClass('bg-success')
+    $("#errorToast").addClass('bg-danger')
+    MostrarToast(msg); 
+}
+
+function MostrarSucesso(msg){
+    $("#errorToast").addClass('bg-success')
+    $("#errorToast").removeClass('bg-danger')
+    MostrarToast(msg);   
+}
+
+function MostrarMensagem(msg){
+    const toast = document.getElementById("toast")
+    toast.innerHTML = msg
+    toast.style.opacity = 1
+    setTimeout(() => toast.style.opacity = 0, 2000)
+}
+
 var RegistroVacinaViewModel = function () {
     var self = this;
 
@@ -49,11 +74,8 @@ var RegistroVacinaViewModel = function () {
             document.getElementById("buttonAdicionar").disabled = false;
         }
         else {
-            self.registrovacinas([])
-            document.getElementById('table-content').style.opacity = '0'
-            document.getElementById("buttonAdicionar").disabled = true;
+            ZerarArrayRegistroVacina()
         }
-
     })
 
     self.getRegistroSelecionado = function (_registro) {
@@ -76,6 +98,12 @@ var RegistroVacinaViewModel = function () {
         self.especie("");
     }
 
+    function ZerarArrayRegistroVacina(){
+        self.registrovacinas([]) 
+        document.getElementById('table-content').style.opacity = '0'
+        document.getElementById("buttonAdicionar").disabled = true;
+    }
+
     function GetRegistroVacina(propriedadeInscricao) {
         $.ajax({
             type: "GET",
@@ -89,7 +117,9 @@ var RegistroVacinaViewModel = function () {
 
                 self.registrovacinas(data);
             },
-            error: error => alert(error.responseJSON)            
+            error: error => {           
+                ZerarArrayRegistroVacina()
+            }
         })
     }
 
@@ -98,11 +128,10 @@ var RegistroVacinaViewModel = function () {
             type: "delete",
             url: `https://localhost:7168/api/RegistroVacina/${self.idRegistroVacinacao()}`,
             success: function () {
-                alert("Registro cancelado com sucesso")
-                console.log(self.selectedPropriedade())
+                MostrarSucesso("Registro cancelado com sucesso")                                
                 GetRegistroVacina(self.selectedPropriedade());
             },
-            error: error => alert(error.responseJSON)
+            error: error => MostrarErro(error.responseJSON[0])
         })
     }
 
@@ -116,7 +145,7 @@ var RegistroVacinaViewModel = function () {
                 self.produtores(data);
                 console.log(self.produtores())
             },
-            error: () =>  alert("Alguma coisa deu errado, contate o admnistrador!")
+            error: () =>  MostrarErro("Alguma coisa deu errado, contate o admnistrador!")
         });
     }
 
@@ -127,7 +156,7 @@ var RegistroVacinaViewModel = function () {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: self.vacinas,
-            error: () => alert("Alguma coisa deu errado, contate o admnistrador!")
+            error: () => MostrarErro("Alguma coisa deu errado, contate o admnistrador!")
         })
     }
     self.Save = () => {
@@ -136,13 +165,13 @@ var RegistroVacinaViewModel = function () {
             url: "https://localhost:7168/api/RegistroVacina",
             data: ko.toJSON(registrovacina),
             contentType: "application/json",
-            success: function (data) {
-                alert("Registro inclu�do com sucesso");
+            success: function (data) {                
                 console.log(self.selectedPropriedade())
                 GetRegistroVacina(self.selectedPropriedade());
                 $('#adicionarRegistroVacina').modal('hide')
+                MostrarSucesso("Registro incluido com sucesso");
             },
-            error: error => alert(error.responseJSON)            
+            error: error => MostrarErro(error.responseJSON[0])            
         })        
     }
 
@@ -156,7 +185,7 @@ var RegistroVacinaViewModel = function () {
             success: function (data) {
                 self.propriedades(data);
             },
-            error: error => alert(error.responseJSON)            
+            error: error => MostrarErro(error.responseJSON[0])            
         })
     }
 
@@ -167,13 +196,9 @@ var RegistroVacinaViewModel = function () {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
-                self.rebanho(data);
-                console.log(self.rebanho())
-                console.log(data.forEach(function (value) {
-                    console.log(value.especie.nome)
-                }));
+                self.rebanho(data);               
             },
-            error: error => alert(error.responseJSON)
+            error: error => MostrarErro(error.responseJSON)
         })
     }
 

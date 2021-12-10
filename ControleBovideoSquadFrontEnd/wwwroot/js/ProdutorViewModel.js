@@ -19,6 +19,30 @@ $(document).bind("ajaxComplete", function(){
     console.log("teste")
 })
 
+function MostrarToast(msg){    
+    var msgError = document.getElementById('errorToastMsg')
+    msgError.innerHTML = msg;          
+    $("#errorToast").toast('show');
+}
+
+function MostrarErro(msg){
+    $("#errorToast").removeClass('bg-success')
+    $("#errorToast").addClass('bg-danger')
+    MostrarToast(msg); 
+}
+
+function MostrarSucesso(msg){
+    $("#errorToast").addClass('bg-success')
+    $("#errorToast").removeClass('bg-danger')
+    MostrarToast(msg);   
+}
+
+function MostrarMensagem(msg){
+    const toast = document.getElementById("toast")
+    toast.innerHTML = msg
+    toast.style.opacity = 1
+    setTimeout(() => toast.style.opacity = 0, 2000)
+}
 
 var ProdutorViewModel = function () {
     var self = this;
@@ -68,7 +92,7 @@ var ProdutorViewModel = function () {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: self.rebanhos,
-            error: error => console.log(error.responseJSON)
+            error: error => MostrarErro(error.responseJSON)
         });
     }
 
@@ -79,7 +103,10 @@ var ProdutorViewModel = function () {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: self.propriedades,            
-            error: () => self.propriedades("")            
+            error: () => {
+                self.propriedades("")            
+                MostrarErro("Nenhuma propriedade Encontrada!")
+            }
         });
     }
 
@@ -107,12 +134,12 @@ var ProdutorViewModel = function () {
                 })
                 self.produtores(data);
             },
-            error: error => alert(error.responseJSON)
+            error: error => MostrarErro(error.responseJSON)
         });
     }
 
     self.GetProdutor = function () {        
-        if (self.findCPF().length < 11 || !self.findCPF()) return alert("Insira o CPF completo")
+        if (self.findCPF().length < 11 || !self.findCPF()) return MostrarErro("Insira o CPF completo")
 
         $.ajax({
             type: "GET",
@@ -126,7 +153,7 @@ var ProdutorViewModel = function () {
                 getRebanhos(data.cpf)
                 $("#showDetails").modal('show')
             },
-            error: () => alert("Produtor não encontrado!")                         
+            error: () => MostrarErro("Produtor não encontrado!")                         
         })
     }
 
@@ -140,14 +167,13 @@ var ProdutorViewModel = function () {
             url: "https://localhost:7168/api/Produtor",
             data: ko.toJSON(produtorDados),
             contentType: "application/json",
-            success: function (data) {
-                alert("Registro incluído com sucesso");
+            success: function (data) {                
                 GetProdutores();
                 $('#adicionarProdutor').modal('hide')
+                MostrarSucesso("Registro incluído com sucesso");
             },
-            error: error => alert(error.responseJSON)            
-        })
-        console.log(ko.toJSON(produtorDados));
+            error: error => MostrarMensagem(error.responseJSON[0])            
+        })        
     }
 
     function GetMunicipios() {
@@ -161,7 +187,7 @@ var ProdutorViewModel = function () {
                 self.municipioEdit(data);
                 console.log(municipioEdit());
             },
-            error: () => alert("Algo deu errado, contate o admnistrador!")
+            error: () => MostrarErro("Algo deu errado, contate o admnistrador!")
         });
     }
     
@@ -178,9 +204,9 @@ var ProdutorViewModel = function () {
                 data.municipio = (self.municipios()[produtorDados.idMunicipio()-1].nome);            
                 getprodutorselecionado(data)                
                 $('#editarProdutor').modal('hide')
-                alert("Registro atualizado com sucesso!");
+                MostrarSucesso("Registro atualizado com sucesso!");
             },
-            error: error => alert(error.responseJSON)            
+            error: error => MostrarErro(error.responseJSON[0])            
         })       
     }
 
