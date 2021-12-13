@@ -1,5 +1,5 @@
 const url = "https://localhost:7168/api/";
-
+const InicioInscricaoEstadual = 285000000;
 var ViewPropriedade = function()
 {
     self = this;
@@ -248,7 +248,7 @@ var ViewPropriedade = function()
 
     function GetPropriedade()
     {
-        if(inscricaoEstadualPesquisa().length == 9)
+        if(inscricaoEstadualPesquisa().length == 9 && ApenasNumeros(inscricaoEstadualPesquisa()) > InicioInscricaoEstadual)
         $.getJSON(url + "propriedade/inscricao/" + ApenasNumeros(inscricaoEstadualPesquisa()), function(data) {
             self.propriedades(data);
         }).fail(function(error){
