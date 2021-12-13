@@ -1,4 +1,5 @@
 const url = "https://localhost:7168/api/";
+
 var ViewPropriedade = function()
 {
     self = this;
@@ -98,8 +99,7 @@ var ViewPropriedade = function()
     });
 
     function ApenasNumeros(string){
-        var str = string.replace(/[^0-9]/g,'');
-        return str;
+        return string.replace(/[^0-9]/g,'');
     }
 
     self.cpfEditar.focused.subscribe(function(newValue) { 
@@ -184,12 +184,12 @@ var ViewPropriedade = function()
         GetRebanhos();
     };
 
-    self.post = function ()
-    {
+    self.post = function (){
         let errors = ko.validation.group(this)
         if (errors().length > 0) return errors.showAllMessages()
         if(cpf.message() != "") return
         if(inscricaoEstadual.message() != "") return
+
         propriedadeAdd.idProdutor = Produtor.idProdutor;
         propriedadeAdd.nomeProdutor = Produtor.nome;
         propriedadeAdd.idPropriedade = 0;
@@ -197,6 +197,7 @@ var ViewPropriedade = function()
         propriedadeAdd.idMunicipio = Municipio().idMunicipio;
         propriedadeAdd.municipio = Municipio().nome;
         propriedadeAdd.estado = Municipio().estado;
+        
         $.ajax({
             type: "POST",
             url: url + "propriedade",
@@ -205,15 +206,15 @@ var ViewPropriedade = function()
             success: function (data) {
                 $('.modal').modal('hide');
                 GetPropriedades();
+                MostrarSucesso("Propriedade adicionada!")
             },
             error: function (error) {
-                alert(error.responseJSON);
+                MostrarErro(error.responseJSON)
             }
         });
     }
 
-    self.put = function ()
-    {            
+    self.put = function (){            
         if(cpfEditar.message() != "") return
         if(inscricaoEstadualEditarEstadual.message() != "") return
         $.ajax({
@@ -224,13 +225,17 @@ var ViewPropriedade = function()
             success: function (data) {
                 $('.modal').modal('hide');
                 GetPropriedades();
+                MostrarSucesso("Propriedade adicionada!")
+
             },
             error: function (error) {
+                MostrarErro(error.responseJSON)
                 alert(error.responseJSON);
             }
         });   
     }
 
+        
     function GetPropriedades() { $.getJSON(url + "propriedade", self.propriedades);}
 
     function GetProdutorId(id)
@@ -244,11 +249,14 @@ var ViewPropriedade = function()
 
     function GetPropriedade()
     {
-        $.getJSON(url + "propriedade/inscricao/" + inscricaoEstadualPesquisa(), function(data) {
-            self.propriedades(data);
-        }).fail(function(error){
-            alert(error.responseJSON);
-        });
+        if(ApenasNumeros(inscricaoEstadualPesquisa()) != "")
+            $.getJSON(url + "propriedade/inscricao/" + ApenasNumeros(inscricaoEstadualPesquisa()), function(data) {
+                self.propriedades(data);
+            }).fail(function(error){
+                MostrarErro(error.responseJSON)
+            });
+        else
+            MostrarErro("Inscrição Estadual inválida!")
     } 
 
     function GetRebanhos()

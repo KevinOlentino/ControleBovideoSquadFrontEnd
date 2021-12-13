@@ -159,6 +159,8 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="toast-per validationMessage" >default</div>
+
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-success">Salvar</button>
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
@@ -233,6 +235,18 @@
         </div>
     </div>
 </div>
+<div class="position-fixed bottom-0 end-0 p-3 " style="z-index: 11" >
+    <div class="toast align-items-center text-white bg-danger border-0 fade" id="toastNotificacao" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMsg"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<div class="loader-wrapper" tabindex="0"><span class="loader"><span class="loader-inner"></span></span></div>
 @section Scripts{
-    <script src="~/js/propriedade.js"></script>
+    <script src="~/js/notificacao.js"></script>
+    <script src="~/js/PropriedadeViewModel.js"></script>
 }
