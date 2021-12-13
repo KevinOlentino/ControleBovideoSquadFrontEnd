@@ -27,14 +27,15 @@
     </table>
 </div>
 @section scripts{
-<script>
-    function appViewModel() {
-        this.rebanhos = ko.observableArray();
-        $.get('https://localhost:7168/api/rebanho', data => {
-            console.log(data)
-            this.rebanhos(data)
-        })
-    }
-    ko.applyBindings(new appViewModel())
-</script>
+    <script src='../js/notificacao.js'></script>
+    <script>
+        function appViewModel() {
+            this.rebanhos = ko.observableArray();
+            $.get('https://localhost:7168/api/rebanho', data => {
+                console.log(data)
+                this.rebanhos(data)
+            })
+        }
+        ko.applyBindings(new appViewModel())
+    </script>
 }

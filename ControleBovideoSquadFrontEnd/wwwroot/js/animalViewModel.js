@@ -11,7 +11,7 @@ function appViewModel() {
         min: 0,
         validation: {
             message: 'O saldo vacinado não pode ser maior que o saldo total',
-            validator: value => value <= self.quantidadeTotal()
+            validator: value => Number(value) <= Number(self.quantidadeTotal())
         }
     })
     self.especieSelecionada = ko.observable("1").extend({
@@ -36,6 +36,8 @@ function appViewModel() {
 
 
     self.salvarEntrada = () => {
+        console.log(self.quantidadeTotal())
+        console.log(self.quantidadeVacinada())
         let errors = ko.validation.group(this)
         if (errors().length > 0) return errors.showAllMessages()
 
@@ -58,8 +60,9 @@ function appViewModel() {
             error: console.log
         }).then(() => {
             $.get(apiUrl, self.animais)
+            MostrarSucesso("Entrada animal inserida")
             $('#adicionarAnimal').modal('hide')
-        }).catch(alert)
+        }).catch(MostrarErro)
     }
 
     self.cancelarEntrada = (animal) => {
@@ -70,8 +73,8 @@ function appViewModel() {
             error: console.log
         }).then(() => {
             $.get(apiUrl, self.animais)
-            alert('Entrada de animal cancelada')
-        }).catch(alert)
+            MostrarSucesso("Entrada cancelada")
+        }).catch(console.log)
     }
 }
 
