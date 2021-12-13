@@ -216,7 +216,7 @@ var ViewPropriedade = function()
 
     self.put = function (){            
         if(cpfEditar.message() != "") return
-        if(inscricaoEstadualEditarEstadual.message() != "") return
+        if(inscricaoEstadualEditar.message() != "") return
         $.ajax({
             type: "PUT",
             url: url + "propriedade",
