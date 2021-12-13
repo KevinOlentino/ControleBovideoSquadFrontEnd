@@ -217,6 +217,7 @@ var ViewPropriedade = function()
     self.put = function (){            
         if(cpfEditar.message() != "") return
         if(inscricaoEstadualEditar.message() != "") return
+
         $.ajax({
             type: "PUT",
             url: url + "propriedade",
@@ -225,7 +226,7 @@ var ViewPropriedade = function()
             success: function (data) {
                 $('.modal').modal('hide');
                 GetPropriedades();
-                MostrarSucesso("Propriedade adicionada!")
+                MostrarSucesso("Propriedade alterada!")
 
             },
             error: function (error) {

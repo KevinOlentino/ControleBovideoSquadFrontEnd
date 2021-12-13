@@ -6,7 +6,7 @@
 
 <div class="container px-4 py-4">
     <p class="blockquote-footer text-center">
-        Selecione um produtor para acessar as informações
+        Selecione uma propriedade para acessar as informações
     </p>
     <div class="row d-flex justify-content-between">
         <button type="button" data-bs-toggle="modal" href="#adicionarPropriedade" data-bind="click: limpaCampo" role="button"
@@ -120,7 +120,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Informe o CPF do produtor: </label>
+                                    <label class="form-label">CPF do produtor: </label>
                                     <input class="form-control me-2" type="text" placeholder="000.000.000-00" name="cpf" data-bind="value: cpf, hasfocus: cpfEditar.focused">
                                     <div class="validationMessage" data-bind="text: cpfEditar.message"></div>
                                 </div>
@@ -131,17 +131,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Informe a Inscrição Estadual: </label>
-                                    <input class="form-control me-2" type="search" name="inscricao_estadual" data-bind="value: inscricaoEstadual, hasfocus: inscricaoEstadualEditar.focused" disabled>
+                                    <label class="form-label">Inscrição Estadual: </label>
+                                    <input class="form-control me-2" type="search" name="inscricao_estadual" data-bind="value: inscricaoEstadual" disabled>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Selecione o município: </label>
-                                    <select data-bind="options: municipios,
-                                        optionsText: 'nome',
-                                        value: Municipio,
-                                        optionValue: idMunicipio,
-                                        optionsCaption: 'Selecione um Municipio'" name="idMunicipio" id="inputState" class="form-select">
-                                    </select>
+                                    <label class="form-label">Município: </label>
+                                    <input class="form-control me-2" type="search" name="inscricao_estadual" data-bind="value: municipio" disabled>
                                 </div>
                             </div>
                         </div>
