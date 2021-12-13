@@ -151,7 +151,6 @@ var ViewPropriedade = function()
     }
 
     self.getInscricao = function(){
-        console.log(inscricaoEstadualPesquisa());
         if(inscricaoEstadualPesquisa() == ""){
             GetPropriedades();
             return;
@@ -235,7 +234,6 @@ var ViewPropriedade = function()
             }
         });   
     }
-
         
     function GetPropriedades() { $.getJSON(url + "propriedade", self.propriedades);}
 
@@ -250,10 +248,10 @@ var ViewPropriedade = function()
 
     function GetPropriedade()
     {
-        if(ApenasNumeros(inscricaoEstadualPesquisa()) != "")
-            $.getJSON(url + "propriedade/inscricao/" + ApenasNumeros(inscricaoEstadualPesquisa()), function(data) {
-                self.propriedades(data);
-            }).fail(function(error){
+        if(inscricaoEstadualPesquisa().length == 9)
+        $.getJSON(url + "propriedade/inscricao/" + ApenasNumeros(inscricaoEstadualPesquisa()), function(data) {
+            self.propriedades(data);
+        }).fail(function(error){
                 MostrarErro(error.responseJSON)
             });
         else
@@ -262,18 +260,19 @@ var ViewPropriedade = function()
 
     function GetRebanhos()
     {
+        self.rebanhos();
         $.getJSON(url + "rebanho/Propriedade/" + inscricaoEstadual(), function(data) {
             self.rebanhos(data);
-            if(rebanhos().length > 0){
+            if(rebanhos().length > 0)
                 $('#rebanho').show();
-            }else{
-                $('#rebanho').hide();
-            }
+        }).fail(function(){
+            $('#rebanho').hide();
         });
     };
 
     function GetRegistroVacinas()
     {
+        //self.registrosVacinas("");
         $.getJSON(url + "registrovacina/" + inscricaoEstadual(), function(data) {
             data.forEach(function (value) {
                 value.dataDaVacina = formatarData(value.dataDaVacina);
@@ -281,8 +280,8 @@ var ViewPropriedade = function()
             self.registrosVacinas(data);
             if(registrosVacinas().length > 0)
                 $('#registroVacina').show();
-            else
-                $('#registroVacina').hide();
+        }).fail(function(){
+            $('#registroVacina').hide();
         });
     };
 
