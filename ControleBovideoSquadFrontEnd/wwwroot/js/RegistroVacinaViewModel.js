@@ -153,7 +153,10 @@ var RegistroVacinaViewModel = function () {
             success: function (data) {
                 self.propriedades(data);
             },
-            error: error => MostrarErro(error.responseJSON[0])            
+            error: () => {
+                self.propriedades([])
+                MostrarErro("Nenhuma propriedade foi encontrada para esse produtor!")
+            }            
         })
     }
 
@@ -168,6 +171,7 @@ var RegistroVacinaViewModel = function () {
                 document.getElementById("buttonAdicionar").disabled = false;                           
             },
             error: () =>{ 
+                self.rebanho([])
                 document.getElementById("buttonAdicionar").disabled = true;
                 MostrarErro("Nenhum rebanho disponivel para ser vacinado!") 
             }

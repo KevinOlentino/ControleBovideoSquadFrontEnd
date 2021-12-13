@@ -15,7 +15,7 @@
         </button>
         <div class="d-flex col-md-4 mt-2">
             <input class="form-control me-2" type="search" placeholder="Pesquisar por CPF" aria-label="Search"
-                data-bind="value: findCPF">
+              id="findByCPF" oninput="mascara(this)" data-bind="value: findCPF">
             <button class="btn btn-outline-success ms-1" data-bs-toggle="modal"
                 data-bind="click: GetProdutor">Procurar</button>
         </div>

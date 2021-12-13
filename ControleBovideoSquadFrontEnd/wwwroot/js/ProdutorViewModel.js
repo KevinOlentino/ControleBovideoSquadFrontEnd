@@ -10,6 +10,8 @@
     if (v.length == 11) i.value += "-";
 }
 
+//document.getElementById("findByCPF").addEventListener('paste', e => e.preventDefault());
+
 var ProdutorViewModel = function () {
     var self = this;
 
@@ -62,6 +64,7 @@ var ProdutorViewModel = function () {
                 document.getElementById('tableRebanhos').style.display = ''           
             },
             error: () => {
+                self.rebanhos([])
                 document.getElementById('tableRebanhos').style.display = 'none'
         }
         });
@@ -112,8 +115,11 @@ var ProdutorViewModel = function () {
         });
     }
 
-    self.GetProdutor = function () {        
-        if (self.findCPF().length < 11 || !self.findCPF()) return MostrarErro("Insira o CPF completo")
+    self.GetProdutor = function () {  
+       
+        var cpf = self.findCPF().replace(/[^0-9]/g,'');
+                
+        if (cpf.length < 11 || !cpf) return MostrarErro("Insira um CPF Valido!")        
 
         $.ajax({
             type: "GET",
@@ -206,7 +212,10 @@ var ProdutorViewModel = function () {
                 self.vendasDoProdutor(data)
                 document.getElementById('tableVendas').style.display = ''
             },
-            error:() => document.getElementById('tableVendas').style.display = 'none'
+            error:() => {
+                self.vendasDoProdutor([])
+                document.getElementById('tableVendas').style.display = 'none'
+        }
         })
     }
 }
