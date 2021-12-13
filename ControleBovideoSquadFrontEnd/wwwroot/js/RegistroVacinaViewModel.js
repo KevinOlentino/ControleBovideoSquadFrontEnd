@@ -39,10 +39,10 @@ var RegistroVacinaViewModel = function () {
         if (value != undefined) {
             GetRebanho(value)
             GetRegistroVacina(value)
-            document.getElementById('table-content').style.opacity = '1'
-            document.getElementById("buttonAdicionar").disabled = false;
+            document.getElementById('table-content').style.opacity = '1'            
         }
         else {
+            document.getElementById("buttonAdicionar").disabled = true;
             ZerarArrayRegistroVacina()
         }
     })
@@ -70,7 +70,6 @@ var RegistroVacinaViewModel = function () {
     function ZerarArrayRegistroVacina(){
         self.registrovacinas([]) 
         document.getElementById('table-content').style.opacity = '0'
-        document.getElementById("buttonAdicionar").disabled = true;
     }
 
     function GetRegistroVacina(propriedadeInscricao) {
@@ -165,9 +164,13 @@ var RegistroVacinaViewModel = function () {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
-                self.rebanho(data);               
+                self.rebanho(data);  
+                document.getElementById("buttonAdicionar").disabled = false;                           
             },
-            error: error => MostrarErro(error.responseJSON)
+            error: () =>{ 
+                document.getElementById("buttonAdicionar").disabled = true;
+                MostrarErro("Nenhum rebanho disponivel para ser vacinado!") 
+            }
         })
     }
 

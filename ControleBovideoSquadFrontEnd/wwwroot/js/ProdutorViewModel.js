@@ -57,8 +57,13 @@ var ProdutorViewModel = function () {
             url: `https://localhost:7168/api/Rebanho/Produtor/${value}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: self.rebanhos,
-            error: error => MostrarErro(error.responseJSON)
+            success: (data) => {
+                self.rebanhos(data);
+                document.getElementById('tableRebanhos').style.display = ''           
+            },
+            error: () => {
+                document.getElementById('tableRebanhos').style.display = 'none'
+        }
         });
     }
 
@@ -68,10 +73,13 @@ var ProdutorViewModel = function () {
             url: `https://localhost:7168/api/Propriedade/Produtor/${value}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: self.propriedades,            
+            success: (data) => {
+                self.propriedades(data)
+                document.getElementById('tablePropriedades').style.display = ''
+            },            
             error: () => {
-                self.propriedades("")            
-                MostrarErro("Nenhuma propriedade Encontrada!")
+                self.propriedades("")                                            
+                document.getElementById('tablePropriedades').style.display = 'none'
             }
         });
     }
@@ -194,8 +202,11 @@ var ProdutorViewModel = function () {
             url: `https://localhost:7168/api/Venda/produtor/${cpfProdutor}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: data => self.vendasDoProdutor(data),
-            error: alert
+            success: data => {
+                self.vendasDoProdutor(data)
+                document.getElementById('tableVendas').style.display = ''
+            },
+            error:() => document.getElementById('tableVendas').style.display = 'none'
         })
     }
 }
